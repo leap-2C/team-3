@@ -1,3 +1,5 @@
+import connectToDatabase from "../database/mongodb.js";
+import mongoose from "mongoose";
 import express from "express";
 import cors from "cors";
 import "dotenv/config";
@@ -12,4 +14,5 @@ app.use(express.json());
 
 app.listen(port, async () => {
   console.log(`🟢 Server is running on port ${port}`);
+  await connectToDatabase();
 });
