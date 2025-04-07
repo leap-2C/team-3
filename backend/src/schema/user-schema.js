@@ -39,19 +39,11 @@ const UserSchema = new mongoose.Schema(
         type: mongoose.Schema.Types.ObjectId,
         ref: "bankCard",
       },
-    ],
-    createdAt: {
-      type: Date,
-      default: Date.now,
-    },
-    updatedAt: {
-      type: Date,
-      default: Date.now,
-    },
+    ]
   },
   { timestamps: true }
 );
 
-const User = mongoose.model("Donation", UserSchema);
+const User = mongoose.model("User", UserSchema);
 
 export default User;
