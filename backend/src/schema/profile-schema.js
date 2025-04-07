@@ -26,15 +26,6 @@ const DonationSchema = new mongoose.Schema({
   successMessage: {
     type: String,
   },
-
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-  updatedAt: {
-    type: Date,
-    default: Date.now,
-  },
 });
 
 const Donation = mongoose.model("Donation", DonationSchema);
