@@ -3,12 +3,12 @@ import mongoose from "mongoose";
 const DonationSchema = new mongoose.Schema(
   {
     donorId: {
-      type: Number,
+      type: String,
       required: true,
     },
     amount: {
       type: Number,
-      enum: ["1", "2", "5", "10"],
+      enum: [1, 2, 5, 10],
       default: 1,
       required: true,
     },

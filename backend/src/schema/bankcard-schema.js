@@ -24,18 +24,11 @@ const BankCardSchema = new mongoose.Schema(
       type: Date,
       required: true,
     },
-    userID: {
+    userId: {
       type: String,
       required: true,
     },
-    createdAt: {
-      type: Date,
-      default: Date.now,
-    },
-    updatedAt: {
-      type: Date,
-      default: Date.now,
-    },
+  
   },
   { timestamps: true }
 );
