@@ -1,4 +1,5 @@
 import Donation from "../../schema/profile-schema.js";
+import User from "../../schema/user-schema.js";
 
 // POST /profile/:userId (shine hereglegch uusgene)
 export const postUser = async (req, res) => {

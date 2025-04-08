@@ -12,4 +12,3 @@ userRouter.get("/current-user", getUser);
 userRouter.get("/explore", getUsers);
 userRouter.post("/:userId", postUser);
 userRouter.patch("/:profileId", putUser);
- 
