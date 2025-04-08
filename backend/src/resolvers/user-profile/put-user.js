@@ -1,7 +1,7 @@
 import Donation from "../../schema/profile-schema.js";
 
 // PATCH /profile/:profileId (profile-n medeelle zasah shinechleh)
-export const updateProfile = async (req, res) => {
+export const putUser = async (req, res) => {
   try {
     const updated = await Donation.findByIdAndUpdate(   ///Donation-g zasna
       req.params.profileId,

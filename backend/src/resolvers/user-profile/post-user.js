@@ -1,7 +1,7 @@
 import Donation from "../../schema/profile-schema.js";
 
 // POST /profile/:userId (shine hereglegch uusgene)
-export const createProfile = async (req, res) => {
+export const postUser = async (req, res) => {
   try {
     const profile = new Donation(req.body);  //Donation-g Profile bolgoj zasna
     await profile.save();
