@@ -16,8 +16,8 @@ model User {
   lastName          String
   receivedDonations Donation[] @relation("ReceivedDonations")
   sentDonations     Donation[] @relation("Donor")
-  profile           Profile    @relation(fields: [profileId], references: [id])
-  profileId         Int        @unique
+  profile Profile? @relation(fields: [profileId], references: [id])
+  profileId         Int?       @unique
   bankCard          BankCard?
   createdAt         DateTime   @default(now())
   updatedAt         DateTime   @updatedAt
