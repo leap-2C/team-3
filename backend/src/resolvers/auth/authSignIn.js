@@ -1,6 +1,5 @@
-import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
-import bcrypt from "bcryptjs";
+import bcrypt from "bcrypt";
 import { TOKEN_EXPIRES_IN, TOKEN_SECRET } from "../../../config/env.js";
 import User from "../../schema/user-schema.js";
 
