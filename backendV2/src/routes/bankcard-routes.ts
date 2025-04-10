@@ -8,5 +8,5 @@ const prisma = new PrismaClient();
 export const bankCardRoute = express.Router();
 
 bankCardRoute.post("/:id", createBankCard);
-bankCardRoute.get("/:userID", getBankCard);
+bankCardRoute.get("/:id", getBankCard);
 bankCardRoute.patch("/:bankCardId", patchBankCard);
