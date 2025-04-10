@@ -5,10 +5,10 @@ import { getUsers } from "../resolvers/user-profile/get-users";
 import { postUser } from "../resolvers/user-profile/post-user";
 import { putUser } from "../resolvers/user-profile/put-user";
 
-export const userRouter = express.Router();
+export const userRoute = express.Router();
 
-userRouter.get("/view/:username", getUsername);
-userRouter.get("/current-user/:id", getUser);
-userRouter.get("/explore", getUsers);
-userRouter.post("/:userId", postUser);
-userRouter.patch("/:profileId", putUser);
+userRoute.get("/view/:username", getUsername);
+userRoute.get("/current-user/:id", getUser);
+userRoute.get("/explore", getUsers);
+userRoute.post("/:userId", postUser);
+userRoute.patch("/:profileId", putUser);
