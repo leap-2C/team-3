@@ -2,10 +2,10 @@ import { PrismaClient } from "@prisma/client";
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
-import { donationRoute } from "./routes/donationRoute";
-import { userRoute } from "./routes/userRoute";
-import { authRoute } from "./routes/authRoute";
-import { bankCardRoute } from "./routes/bankCardRoute";
+import { donationRoute } from "./routes/donation-routes
+import { userRoute } from "./routes/user-routes";
+import { authRoute } from "./routes/auth-routes";
+import { bankCardRoute } from "./routes/bankcard-routes";
 
 dotenv.config();
 const app = express();
