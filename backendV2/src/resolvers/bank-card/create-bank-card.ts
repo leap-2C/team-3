@@ -1,8 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { Response, Request } from "express";
-import bcrypt from "bcrypt";
+
 const prisma = new PrismaClient();
-const SALT_ROUNDS = 10;
 
 // Cardnii type
 interface CreateBankCardRequestBody {
@@ -27,22 +26,19 @@ export const createBankCard = async (
   req: CreateBankCardRequest,
   res: Response
 ) => {
+  const { id } = req.params;
+  const { cardNumber, country, firstName, lastName, expiryDate } = req.body;
   try {
-    const { id } = req.params;
-    const { cardNumber, country, firstName, lastName, expiryDate } = req.body;
-    const hashedCardNumber = await bcrypt.hash(cardNumber, SALT_ROUNDS);
-    const hashedCountry = await bcrypt.hash(country, SALT_ROUNDS);
-    const hashedFirstName = await bcrypt.hash(firstName, SALT_ROUNDS);
-    const hashedLastName = await bcrypt.hash(lastName, SALT_ROUNDS);
-    const hashedExpiryDate = await bcrypt.hash(expiryDate, SALT_ROUNDS);
+    console.log("data", req.body);
+
     const savedBankCard = await prisma.bankCard.create({
       data: {
-        cardNumber: hashedCardNumber,
-        country: hashedCountry,
-        firstName: hashedFirstName,
-        lastName: hashedLastName,
-        expiryDate: hashedExpiryDate,
-        userId: parseInt(id, 10),
+        cardNumber,
+        country,
+        firstName,
+        lastName,
+        expiryDate,
+        userId: parseInt(id),
       },
     });
 
@@ -51,5 +47,6 @@ export const createBankCard = async (
       .json({ message: "Bank card saved successfully", data: savedBankCard });
   } catch (err) {
     console.log("Error on POST bankcard:", err);
+    res.status(505).json({ error: err });
   }
 };
