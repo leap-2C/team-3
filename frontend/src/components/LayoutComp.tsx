@@ -14,9 +14,11 @@ export default function LayoutComp({
   children: React.ReactNode;
 }) {
   return (
-    <div className={manRope.variable}>
-      {children}
-      <ToastContainer />
-    </div>
+    <html>
+      <body className={manRope.variable}>
+        {children}
+        <ToastContainer />
+      </body>
+    </html>
   );
 }
