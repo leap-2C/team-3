@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import { PrismaClient } from "@prisma/client";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import { sendEmail } from "../../services/email-verification";
 
 dotenv.config();
 
@@ -27,6 +28,7 @@ export const signUp = async (
   try {
     const { username, password, email, firstName, lastName } = req.body;
 
+    // username dawhtsaj baigaa uguig shalgana
     const existingUser = await prisma.user.findUnique({
       where: { username },
     });
@@ -46,7 +48,12 @@ export const signUp = async (
     const salt = await bcrypt.genSalt(12);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    // Create a new user
+    // Generate a verification code
+    const verificationCode = Math.floor(
+      100000 + Math.random() * 900000
+    ).toString();
+
+    // Create a new user with verification code
     const newUser = await prisma.user.create({
       data: {
         username: username,
@@ -54,21 +61,25 @@ export const signUp = async (
         email: email,
         firstName: firstName || "",
         lastName: lastName || "",
+        verificationCode: verificationCode, //eniig bd dee nemne
       },
     });
+
+    // Send the verification email
+    await sendEmail(email, verificationCode);
 
     // Generate access token
     const accessToken = jwt.sign(
       { userId: newUser.id },
       process.env.TOKEN_SECRET || "",
-      { expiresIn: "15m" } // 15 minutes expiry for access token
+      { expiresIn: "15m" }
     );
 
     // Generate refresh token
     const refreshToken = jwt.sign(
       { userId: newUser.id },
       process.env.TOKEN_SECRET || "",
-      { expiresIn: "7d" } // 7 days expiry for refresh token
+      { expiresIn: "7d" }
     );
 
     // Store the refresh token securely
@@ -79,13 +90,18 @@ export const signUp = async (
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
 
-    // Remove password before returning user data
-    const { password: userPassword, ...userInfo } = newUser;
+    // passiig hasaj baina
+    const {
+      password: userPassword,
+      verificationCode: code,
+      ...userInfo
+    } = newUser;
 
     // Send response
     res.status(201).json({
       success: true,
-      message: "User successfully registered",
+      message:
+        "User successfully registered. Please check your email for the verification code.",
       data: {
         accessToken,
         refreshToken,
