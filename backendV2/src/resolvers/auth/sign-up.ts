@@ -56,12 +56,13 @@ export const signUp = async (
     // Create a new user with verification code
     const newUser = await prisma.user.create({
       data: {
-        username: username,
+        username,
         password: hashedPassword,
-        email: email,
+        email,
         firstName: firstName || "",
         lastName: lastName || "",
-        verificationCode: verificationCode, //eniig bd dee nemne
+        verificationCode,
+        isVerified: false,
       },
     });
 
@@ -91,21 +92,17 @@ export const signUp = async (
     });
 
     // passiig hasaj baina
-    const {
-      password: userPassword,
-      verificationCode: code,
-      ...userInfo
-    } = newUser;
+    const { password: _, verificationCode: __, ...safeUserData } = newUser;
 
     // Send response
     res.status(201).json({
       success: true,
       message:
-        "User successfully registered. Please check your email for the verification code.",
+        "User registered. Please check your email for the verification code.",
       data: {
         accessToken,
         refreshToken,
-        user: userInfo,
+        user: safeUserData,
       },
     });
   } catch (err) {
