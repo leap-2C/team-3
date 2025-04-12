@@ -1,9 +1,11 @@
 "use client";
 
-import { ShieldUser, Mail, Lock, Phone } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ShieldUser, Mail, Lock, Phone, UserRound } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import Cookies from "js-cookie";
@@ -46,111 +48,89 @@ export function SignUpForm({
     }
   };
 
+  const notify = () => toast("Wow so easy!");
+
   return (
     <form
-      className={cn("flex flex-col gap-6", className)}
+      className={cn("flex flex-col gap-6 w-full", className)}
       {...props}
       onSubmit={fetchSignUp}
     >
       <div className="flex flex-col items-center gap-2 text-center">
-        <h1 className="text-4xl font-bold">Create an Account</h1>
-        <p className="text-balance text-sm text-muted-foreground -mt-2">
-          Join us today! Enter your details below.
+        <h1 className="text-4xl font-extrabold">Create an Account</h1>
+        <p className="text-balance text-sm text-[var(--foreground)]/40 -mt-2">
+          Please enter your details wisely
         </p>
       </div>
-      <div className="grid gap-6">
-        <div className="grid gap-2">
-          <div className="bg-[var(--background)] rounded-[var(--radius)] border-2 w-full flex flex-row justify-center items-center gap-4">
-            <ShieldUser width={17} className="ml-5" />
-            <hr className="border-0 border-r-1 border-[var(--foreground)]/20 h-3/5" />
-            <div className="flex flex-col w-[90%] py-2">
-              <p className="text-[10px] text-[var(--foreground)]/70 -mb-[4px]">
-                Full Name
-              </p>
-              <Input
-                id="name"
-                type="text"
-                name="name"
-                placeholder="John Doe"
-                value={data.name}
-                onChange={handleChange}
-                required
-                className="bg-[var(--background)] shadow-none w-full h-6 border-none pl-0 rounded-none font-semibold focus-visible:ring-0"
-              />
+      <div className="w-full flex flex-col justify-center items-center">
+        <Tabs defaultValue="signup" className="w-3/4">
+          <TabsList className="grid grid-cols-2 h-14 rounded-2xl w-full mb-4">
+            <TabsTrigger value="signup" className="rounded-2xl">
+              Signup
+            </TabsTrigger>
+            <TabsTrigger value="signin" className="rounded-2xl">
+              Sign In
+            </TabsTrigger>
+          </TabsList>
+          <TabsContent value="signup" className="flex flex-col gap-4 w-full">
+            <div className="bg-[var(--background)] rounded-2xl border-[#EEEEEE] border-2 w-full flex flex-row justify-center items-center gap-4 py-1">
+              <Mail width={23} strokeWidth={1.5} className="ml-5" />
+              <hr className="border-r-1 border-[#EEEEEE] h-8" />
+              <div className="flex flex-col w-full py-2 px-1">
+                <p className="text-[10px] text-[var(--foreground)]/50 font-bold -mb-[2px]">
+                  Email Address
+                </p>
+                <Input
+                  id="email"
+                  type="text"
+                  name="email"
+                  placeholder="your@mail.com"
+                  value={data.name}
+                  onChange={handleChange}
+                  required
+                  className="bg-[var(--background)] text-sm text-[var(--foreground)] shadow-none w-full h-6 border-none pl-0 rounded-none font-bold focus-visible:ring-0"
+                />
+              </div>
             </div>
-          </div>
-        </div>
-        <div className="grid gap-2">
-          <div className="bg-[var(--background)] rounded-[var(--radius)] border-2 w-full flex flex-row justify-center items-center gap-4">
-            <Mail width={17} className="ml-5" />
-            <hr className="border-0 border-r-1 border-[var(--foreground)]/20 h-3/5" />
-            <div className="flex flex-col w-[90%] py-2">
-              <p className="text-[10px] text-[var(--foreground)]/70 -mb-[4px]">
-                Email Address
-              </p>
-              <Input
-                id="email"
-                type="email"
-                name="email"
-                placeholder="m@example.com"
-                value={data.email}
-                onChange={handleChange}
-                required
-                className="bg-[var(--background)] shadow-none w-full h-6 border-none pl-0 rounded-none font-semibold focus-visible:ring-0"
-              />
+            <Button
+              type="submit"
+              className="w-full py-7 bg-[#0363FB] hover:bg-[#0362fbe1] rounded-2xl font-semibold"
+              disabled={isLoading}
+              onClick={notify}
+            >
+              {isLoading ? "Signing up..." : "Sign Up"}
+            </Button>
+          </TabsContent>
+          <TabsContent value="signin" className="w-full flex flex-col gap-4">
+            <div className="bg-[var(--background)] rounded-2xl border-[#EEEEEE] border-2 w-full flex flex-row justify-center items-center gap-4 py-1">
+              <UserRound width={23} strokeWidth={1.5} className="ml-5" />
+              <hr className="border-r-1 border-[#EEEEEE] h-8" />
+              <div className="flex flex-col w-full py-2 px-1">
+                <p className="text-[10px] text-[var(--foreground)]/50 font-bold -mb-[2px]">
+                  Name
+                </p>
+                <Input
+                  id="name"
+                  type="text"
+                  name="name"
+                  placeholder="eg. John"
+                  value={data.name}
+                  onChange={handleChange}
+                  required
+                  className="bg-[var(--background)] text-sm text-[var(--foreground)] shadow-none w-full h-6 border-none pl-0 rounded-none font-bold focus-visible:ring-0"
+                />
+              </div>
             </div>
-          </div>
-        </div>
-        <div className="grid gap-2">
-          <div className="bg-[var(--background)] rounded-[var(--radius)] border-2 w-full flex flex-row justify-center items-center gap-4">
-            <Phone width={17} className="ml-5" />
-            <hr className="border-0 border-r-1 border-[var(--foreground)]/20 h-3/5" />
-            <div className="flex flex-col w-[90%] py-2">
-              <p className="text-[10px] text-[var(--foreground)]/70 -mb-[4px]">
-                Phone Number
-              </p>
-              <Input
-                id="phoneNumber"
-                type="tel"
-                name="phoneNumber"
-                value={data.phoneNumber}
-                onChange={handleChange}
-                required
-                className="bg-[var(--background)] shadow-none w-full h-6 border-none pl-0 rounded-none font-semibold focus-visible:ring-0"
-              />
-            </div>
-          </div>
-        </div>
-        <div className="grid gap-2">
-          <div className="bg-[var(--background)] rounded-[var(--radius)] border-2 w-full flex flex-row justify-center items-center gap-4">
-            <Lock width={17} className="ml-5" />
-            <hr className="border-0 border-r-1 border-[var(--foreground)]/20 h-3/5" />
-            <div className="flex flex-col w-[90%] py-2">
-              <p className="text-[10px] text-[var(--foreground)]/70 -mb-[4px]">
-                Password
-              </p>
-              <Input
-                id="password"
-                type="password"
-                name="password"
-                placeholder="****"
-                value={data.password}
-                onChange={handleChange}
-                required
-                className="bg-[var(--background)] shadow-none w-full h-6 border-none pl-0 rounded-none font-semibold focus-visible:ring-0"
-              />
-            </div>
-          </div>
-        </div>
-        <Button type="submit" className="w-full py-5" disabled={isLoading}>
-          {isLoading ? "Signing up..." : "Sign Up"}
-        </Button>
-      </div>
-      <div className="text-center text-sm">
-        Already have an account?{" "}
-        <a href="/auth/sign-in" className="underline underline-offset-4">
-          Log in
-        </a>
+            <Button
+              type="submit"
+              className="w-full py-7 bg-[#0363FB] hover:bg-[#0362fbe1] rounded-2xl font-semibold"
+              disabled={isLoading}
+              onClick={notify}
+            >
+              {isLoading ? "Signing up..." : "Sign Up"}
+            </Button>
+          </TabsContent>
+        </Tabs>
       </div>
     </form>
   );
