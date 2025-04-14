@@ -1,14 +1,14 @@
 "use client";
-
+import ProfileCard from "@/components/profileCard";
 import { PlaceholdersAndVanishInput } from "@/components/ui/placeholder-and-vanish-input";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+// import {
+//   Card,
+//   CardContent,
+//   CardDescription,
+//   CardFooter,
+//   CardHeader,
+//   CardTitle,
+// } from "@/components/ui/card";
 
 const Explore = () => {
   const placeholders = [
@@ -42,17 +42,16 @@ const Explore = () => {
             />
           </div>
         </div>
-        <div className="mt-14 w-full bg-pink-400 grid grid-cols-4  gap-10">
-          <div className="bg-amber-300 h-[312px] ">1</div>
-          <div className="bg-amber-300 h-[312px] ">2</div>
-          <div className="bg-amber-300 h-[312px] ">3</div>
-          <div className="bg-amber-300 h-[312px] ">4</div>
-          <div className="bg-amber-300 h-[312px] ">5</div>
-          <div className="bg-amber-300 h-[312px] ">6</div>
-          <div className="bg-amber-300 h-[312px] ">7</div>
-          <div className="bg-amber-300 h-[312px] ">8</div>
-          <div className="bg-amber-300 h-[312px] ">9</div>
-          <div className="bg-amber-300 h-[312px] ">10</div>
+        <div className="mt-14 w-full grid grid-cols-4  gap-10">
+          <ProfileCard />
+          <ProfileCard />
+          <ProfileCard />
+          <ProfileCard />
+          <ProfileCard />
+          <ProfileCard />
+          <ProfileCard />
+          <ProfileCard />
+          <ProfileCard />
         </div>
       </div>
     </>
