@@ -25,14 +25,14 @@ export default function TextareaGroup({
   return (
     <div className={`flex flex-col ${className}`}>
       <div className="w-full h-[128px] rounded-2xl bg-[#161616] border border-[#3B3B3B] px-4 py-3 flex flex-col justify-start">
-        <Label htmlFor={id} className="text-xs text-white">
+        <Label htmlFor={id} className="text-[10px] text-[#7D7D7D]">
           {label}
         </Label>
         <Textarea
           id={id}
           placeholder={placeholder}
           {...register(id, registerOptions)}
-          className="p-0 mt-1 resize-none bg-transparent border-none text-sm text-white focus-visible:ring-0 focus-visible:ring-offset-0"
+          className="p-0 resize-none bg-transparent border-none text-sm text-white focus-visible:ring-0 focus-visible:ring-offset-0"
         />
       </div>
       {error && (
@@ -41,3 +41,5 @@ export default function TextareaGroup({
     </div>
   );
 }
+ 
+// check
