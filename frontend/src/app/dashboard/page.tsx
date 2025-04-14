@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Banknote, BanknoteArrowDown, Copy, Eye, ImageUp } from "lucide-react";
+import EditCreditCard from "./_components/EditCreditCard";
 import {
   Select,
   SelectContent,
@@ -84,9 +85,7 @@ const Dashboard = () => {
                 <p className="text-xl text-[var(--background)] font-bold">
                   Jameson Cole
                 </p>
-                <Button className="dark rounded-full bg-[var(--foreground)] font-bold px-6">
-                  Edit Card
-                </Button>
+                  <EditCreditCard />
               </div>
               <div className="w-full h-1/4 flex justify-between items-center">
                 <div className="flex flex-row items-center gap-4">
