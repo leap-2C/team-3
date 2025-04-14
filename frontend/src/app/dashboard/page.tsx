@@ -85,7 +85,7 @@ const Dashboard = () => {
                 <p className="text-xl text-[var(--background)] font-bold">
                   Jameson Cole
                 </p>
-                  <EditCreditCard />
+                <EditCreditCard />
               </div>
               <div className="w-full h-1/4 flex justify-between items-center">
                 <div className="flex flex-row items-center gap-4">
