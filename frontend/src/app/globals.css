@@ -123,8 +123,52 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
     font-family: Manrope;
   }
+}
+
+.ReactFlagsSelect-module_selectBtn__19wW7 {
+  border: none !important;
+}
+
+.ReactFlagsSelect-module_flagsSelect__2pfa2 {
+  padding-bottom: 0 !important;
+}
+
+.ReactFlagsSelect-module_selectOptions__3LNBJ {
+  background: #161616 !important;
+  border-radius: 16px !important;
+  border-color: #3B3B3B !important;
+  width: 352px !important;
+  padding: 0 !important;
+  margin-top: 16px !important;
+
+}
+
+.ReactFlagsSelect-module_fullWidthOptions__1XeR6 {
+  left: -17px !important;
+}
+
+.ReactFlagsSelect-module_selectOption__3pcgW {
+  margin-top: 10px !important;
+}
+
+.ReactFlagsSelect-module_selectOption__3pcgW:hover {
+  background: #3B3B3B !important;
+  transition: all 0.3s ease-in-out !important;
+}
+
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
 }
