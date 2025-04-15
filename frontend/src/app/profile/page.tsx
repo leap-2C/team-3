@@ -15,7 +15,6 @@ export type ProfileFormData = {
 };
 
 export default function ProfilePage() {
-
   // const [showFullAbout, setShowFullAbout] = useState(false);
   // const [image, setImage] = useState<File | null>(null);
   const {
@@ -23,7 +22,7 @@ export default function ProfilePage() {
     handleSubmit,
     formState: { errors },
     reset,
-    watch
+    watch,
   } = useForm<ProfileFormData>({
     defaultValues: {
       username: "",
@@ -33,7 +32,7 @@ export default function ProfilePage() {
     },
   });
   const about = watch("about");
-  
+
   const onSubmit = (data: ProfileFormData) => {
     console.log("Form submitted!", data);
   };
@@ -58,13 +57,18 @@ export default function ProfilePage() {
 
   // URL copy hiine
   const handleCopyUrl = () => {
-    const urlToCopy = `https://buymecoffee.com/${watchedValues.username || "username"}`;
-    
-    navigator.clipboard.writeText(urlToCopy).then(() => {
-      alert("URL copied to clipboard!");
-    }).catch((err) => {
-      console.error("Failed to copy: ", err);
-    });
+    const urlToCopy = `https://buymecoffee.com/${
+      watchedValues.username || "username"
+    }`;
+
+    navigator.clipboard
+      .writeText(urlToCopy)
+      .then(() => {
+        alert("URL copied to clipboard!");
+      })
+      .catch((err) => {
+        console.error("Failed to copy: ", err);
+      });
   };
 
   // const handleImageUpload = async () => {
@@ -84,9 +88,12 @@ export default function ProfilePage() {
 
   return (
     <div className="h-screen grid place-items-center">
-      <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-2 gap-44">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="grid grid-cols-2 gap-44"
+      >
         <div className="w-[352px] grid place-items-center gap-7">
-          <h6 className="w-[240px] text-transparent bg-gradient-to-r from-white via-white to-blurred bg-clip-text font-bold text-[40px]">
+          <h6 className="w-[240px] py-2 text-transparent bg-gradient-to-r from-white via-white to-blurred bg-clip-text font-bold text-[40px] leading-10">
             Create your profile page
           </h6>
 
@@ -95,7 +102,7 @@ export default function ProfilePage() {
               id="username"
               label="Username"
               placeholder="Pick a cool username"
-              className="col-span-6"
+              className="col-span-6 font-bold"
               register={register}
               registerOptions={{
                 required: "* Username is required",
@@ -103,7 +110,7 @@ export default function ProfilePage() {
               error={errors.username?.message}
               icon={<User2 className="w-4 h-4" />}
             />
-            
+
             <InputGroup
               id="firstname"
               label="First Name"
@@ -146,36 +153,42 @@ export default function ProfilePage() {
             />
           </div>
 
-          <Button type="submit" className="w-full h-[57px] bg-[#0363FB] cursor-pointer rounded-2xl">
+          <Button
+            type="submit"
+            className="w-full h-[57px] bg-[#0363FB] cursor-pointer rounded-2xl"
+          >
             Continue
           </Button>
         </div>
 
         {/* preview */}
         <div className="relative w-[432px] h-[591px] rounded-4xl overflow-hidden">
-          <div className="h-1/2 box-border group relative bg-slate-400 bg-cover bg-center" style={{
-                backgroundImage: `url(https://shorturl.at/reOZ8)`,
-              }}>
+          <div
+            className="h-1/2 box-border group relative bg-slate-400 bg-cover bg-center"
+            style={{
+              backgroundImage: `url(https://shorturl.at/reOZ8)`,
+            }}
+          >
             <div className="absolute opacity-0 left-4 top-6 px-5 py-2 bg-[var(--foreground)]/40 rounded-full  group-hover:opacity-100 transition-all cursor-pointer">
               <p className="text-xs text-[var(--background)] flex flex-row items-center gap-2">
                 <ImageUp width={14} />
                 Upload image
               </p>
             </div>
-            <div className="absolute bottom-[23px] right-[21px] bg-white w-[83px] h-[33px] rounded-full text-black flex items-center justify-center">
+            <div className="absolute bottom-[23px] right-[21px] bg-white w-[83px] h-[33px] rounded-full text-black flex items-center justify-center cursor">
               Follow
             </div>
           </div>
-          <div className="absolute top-[40%] left-[34px] w-[111px] h-[111px] rounded-2xl overflow-hidden group aspect-square bg-slate-500 bg-cover bg-center" style={{
-                backgroundImage: `url(https://shorturl.at/Qy5e9)`,
-              }}>
-                <div className="absolute w-full h-full opacity-0 flex justify-center items-center  bg-[var(--foreground)]/40 group-hover:opacity-100 transition-all cursor-pointer">
-                    <ImageUp
-                      width={20}
-                      className="stroke-[var(--background)]"
-                    />
-                  </div>
-              </div>
+          <div
+            className="absolute top-[40%] left-[34px] w-[111px] h-[111px] rounded-2xl overflow-hidden group aspect-square bg-slate-500 bg-cover bg-center"
+            style={{
+              backgroundImage: `url(https://shorturl.at/Qy5e9)`,
+            }}
+          >
+            <div className="absolute w-full h-full opacity-0 flex justify-center items-center  bg-[var(--foreground)]/40 group-hover:opacity-100 transition-all cursor-pointer">
+              <ImageUp width={20} className="stroke-[var(--background)]" />
+            </div>
+          </div>
           <div className="h-1/2 bg-white box-border p-8 flex flex-col gap-4 ">
             <div className="font-extrabold text-black text-3xl mt-8">
               {watchedValues.firstname || "Your Name"}
@@ -184,9 +197,7 @@ export default function ProfilePage() {
               @{watchedValues.username || "username"}
             </div>
             <div className="text-black opacity-80 relative">
-              <p className="line-clamp-3">
-                {about || "No bio yet."}
-              </p>
+              <p className="line-clamp-3">{about || "No bio yet."}</p>
 
               {about && about.length > 35 && (
                 <span className="block">See more...</span>
@@ -201,7 +212,7 @@ export default function ProfilePage() {
               </div>
             </div>
             <div className="flex flex-row text-sm items-center text-blue-400 gap-2">
-              <Link2 
+              <Link2
                 className="h-5 text-gray-400 p-0 cursor-pointer"
                 onClick={handleCopyUrl}
               />
@@ -209,7 +220,6 @@ export default function ProfilePage() {
             </div>
           </div>
         </div>
-
       </form>
     </div>
   );
