@@ -10,21 +10,21 @@ import { bankCardRoute } from "./routes/bankcard-routes";
 dotenv.config();
 const app = express();
 const prisma = new PrismaClient();
+const port = process.env.PORT || 8000;
 
 app.use(cors());
 app.use(express.json());
+app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 
 app.use("/api/donation", donationRoute);
 app.use("/api/bankcard", bankCardRoute);
 app.use("/api/auth", authRoute);
 app.use("/api/profile", userRoute);
 
-app.get("/", async (req, res) => {
-  const users = await prisma.user.findMany();
-  res.json(users);
+app.listen(port, async () => {
+  console.log(`🟢 Server is running`);
 });
 
-const PORT = process.env.PORT;
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+app.get("/api", (req, res) => {
+  res.send("API is running...");
 });
