@@ -1,14 +1,6 @@
 "use client";
 import ProfileCard from "@/components/profileCard";
 import { PlaceholdersAndVanishInput } from "@/components/ui/placeholder-and-vanish-input";
-// import {
-//   Card,
-//   CardContent,
-//   CardDescription,
-//   CardFooter,
-//   CardHeader,
-//   CardTitle,
-// } from "@/components/ui/card";
 
 const Explore = () => {
   const placeholders = [
@@ -29,7 +21,7 @@ const Explore = () => {
   };
   return (
     <>
-      <div className="w-full  bg-[#0b0d0e] px-[10%]">
+      <div className="w-full  bg-[#0b0d0e] px-[10%] min-h-screen ">
         <div className="pt-20 flex justify-between  dark">
           <div className="text-white font-extrabold text-2xl">
             Explore Users
@@ -52,7 +44,26 @@ const Explore = () => {
           <ProfileCard />
           <ProfileCard />
           <ProfileCard />
+          <ProfileCard />
+          <ProfileCard />
+          <ProfileCard />
+          <ProfileCard />
+          <ProfileCard />
+          <ProfileCard />
+          <ProfileCard />
+          <ProfileCard />
+          <ProfileCard />
+          <ProfileCard />
+          <ProfileCard />
+          <ProfileCard />
+          <ProfileCard />
+          <ProfileCard />
+          <ProfileCard />
+          <ProfileCard />
+          <ProfileCard />
+          <ProfileCard />
         </div>
+        <div className="mt-6 w-full h-96 bg-blue-300"></div>
       </div>
     </>
   );

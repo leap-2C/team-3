@@ -1,22 +1,24 @@
 import { ExternalLink, Link2 } from "lucide-react";
+import Image from "next/image";
 export default function ProfileCard() {
   return (
-    <div className="bg-white rounded-2xl shadow-lg overflow-hidden max-w-sm">
+    <div className="bg-white rounded-2xl shadow-lg overflow-hidden ">
       <div className="relative">
-        <img
-          src="/akatsuki.png"
-          alt="Banner"
-          className="w-[362px] h-[128px] object-cover"
-          //   height={128}
-          //   width={362}
-        />
-        <div className="absolute -bottom-[42px] left-4">
-          <img
+        <div className="w-[362px] h-[128px]  ">
+          <Image
+            src="/akatsuki.png"
+            alt="Banner"
+            className="object-cover"
+            fill
+          />
+        </div>
+
+        <div className="absolute -bottom-[42px] left-4 w-[93px] h-[93px] ">
+          <Image
             src="/naruto.png"
             alt="Profile"
-            className="rounded-md w-[93px] h-[93px]"
-            // width={93}
-            // height={93}
+            className="rounded-md w-[93px] h-[93px] object-cover"
+            fill
           />
         </div>
         <button className="text-sm py-1 px-2 bg-white font-bold text-black absolute right-6 bottom-5 rounded-full hover:bg-gray-100">
