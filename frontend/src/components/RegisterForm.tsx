@@ -21,8 +21,9 @@ export function SignUpForm({
     name: "",
     email: "",
     password: "",
-    phoneNumber: "",
+    confirmPassword: "",
   });
+  const [activeTab, setActiveTab] = useState("signup");
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
@@ -30,31 +31,44 @@ export function SignUpForm({
     setData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const fetchSignUp = async (e: any) => {
+  const fetchAuth = async (e: any) => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      const res = await axios.post(`${API_URL}/api/auth/sign-up`, data, {
+      console.log(`HI`);
+      const endpoint = activeTab === "signup" ? "sign-up" : "sign-in";
+      const res = await axios.post(`${API_URL}/api/auth/${endpoint}`, data, {
         withCredentials: true,
       });
       setIsLoading(false);
 
-      const token = res.data.data.token;
-      Cookies.set("token", token, { expires: 7, path: "/" });
-      router.push("/home");
+      if (activeTab === "signup") {
+        toast.success("Account created successfully");
+      } else {
+        toast.success("Logged in successfully");
+      }
+      if (activeTab === "signup") {
+        const token = res.data.data.token;
+        Cookies.set("token", token, { expires: 7, path: "/" });
+        router.push("/home");
+      } else {
+        router.push("/home");
+      }
     } catch (err: any) {
       setIsLoading(false);
       console.error(err);
+      toast.error(err.response.data.message);
+      if (err.response.status === 404) {
+        toast.error("Server not found");
+      }
     }
   };
-
-  const notify = () => toast("Wow so easy!");
 
   return (
     <form
       className={cn("flex flex-col gap-6 w-full", className)}
       {...props}
-      onSubmit={fetchSignUp}
+      onSubmit={fetchAuth}
     >
       <div className="flex flex-col items-center gap-2 text-center">
         <h1 className="text-4xl font-extrabold">Create an Account</h1>
@@ -63,7 +77,11 @@ export function SignUpForm({
         </p>
       </div>
       <div className="w-full flex flex-col justify-center items-center">
-        <Tabs defaultValue="signup" className="w-3/4">
+        <Tabs
+          defaultValue="signup"
+          className="w-3/4"
+          onValueChange={(value) => setActiveTab(value)}
+        >
           <TabsList className="grid grid-cols-2 h-14 rounded-2xl w-full mb-4">
             <TabsTrigger value="signup" className="rounded-2xl">
               Signup
@@ -85,7 +103,44 @@ export function SignUpForm({
                   type="text"
                   name="email"
                   placeholder="your@mail.com"
-                  value={data.name}
+                  value={data.email}
+                  onChange={handleChange}
+                  className="bg-[var(--background)] text-sm text-[var(--foreground)] shadow-none w-full h-6 border-none pl-0 rounded-none font-bold focus-visible:ring-0"
+                />
+              </div>
+            </div>
+            <div className="bg-[var(--background)] rounded-2xl border-[#EEEEEE] border-2 w-full flex flex-row justify-center items-center gap-4 py-1">
+              <Lock width={23} strokeWidth={1.5} className="ml-5" />
+              <hr className="border-r-1 border-[#EEEEEE] h-8" />
+              <div className="flex flex-col w-full py-2 px-1">
+                <p className="text-[10px] text-[var(--foreground)]/50 font-bold -mb-[2px]">
+                  Password
+                </p>
+                <Input
+                  id="password"
+                  type="text"
+                  name="password"
+                  placeholder="***"
+                  value={data.password}
+                  onChange={handleChange}
+                  required
+                  className="bg-[var(--background)] text-sm text-[var(--foreground)] shadow-none w-full h-6 border-none pl-0 rounded-none font-bold focus-visible:ring-0"
+                />
+              </div>
+            </div>
+            <div className="bg-[var(--background)] rounded-2xl border-[#EEEEEE] border-2 w-full flex flex-row justify-center items-center gap-4 py-1">
+              <Lock width={23} strokeWidth={1.5} className="ml-5" />
+              <hr className="border-r-1 border-[#EEEEEE] h-8" />
+              <div className="flex flex-col w-full py-2 px-1">
+                <p className="text-[10px] text-[var(--foreground)]/50 font-bold -mb-[2px]">
+                  Confirm Password
+                </p>
+                <Input
+                  id="confirmPassword"
+                  type="text"
+                  name="confirmPassword"
+                  placeholder="***"
+                  value={data.confirmPassword}
                   onChange={handleChange}
                   required
                   className="bg-[var(--background)] text-sm text-[var(--foreground)] shadow-none w-full h-6 border-none pl-0 rounded-none font-bold focus-visible:ring-0"
@@ -96,7 +151,6 @@ export function SignUpForm({
               type="submit"
               className="w-full py-7 bg-[#0363FB] hover:bg-[#0362fbe1] rounded-2xl font-semibold"
               disabled={isLoading}
-              onClick={notify}
             >
               {isLoading ? "Signing up..." : "Sign Up"}
             </Button>
@@ -121,11 +175,29 @@ export function SignUpForm({
                 />
               </div>
             </div>
+            <div className="bg-[var(--background)] rounded-2xl border-[#EEEEEE] border-2 w-full flex flex-row justify-center items-center gap-4 py-1">
+              <Lock width={23} strokeWidth={1.5} className="ml-5" />
+              <hr className="border-r-1 border-[#EEEEEE] h-8" />
+              <div className="flex flex-col w-full py-2 px-1">
+                <p className="text-[10px] text-[var(--foreground)]/50 font-bold -mb-[2px]">
+                  Password
+                </p>
+                <Input
+                  id="password"
+                  type="text"
+                  name="password"
+                  placeholder="***"
+                  value={data.password}
+                  onChange={handleChange}
+                  required
+                  className="bg-[var(--background)] text-sm text-[var(--foreground)] shadow-none w-full h-6 border-none pl-0 rounded-none font-bold focus-visible:ring-0"
+                />
+              </div>
+            </div>
             <Button
               type="submit"
               className="w-full py-7 bg-[#0363FB] hover:bg-[#0362fbe1] rounded-2xl font-semibold"
               disabled={isLoading}
-              onClick={notify}
             >
               {isLoading ? "Signing up..." : "Sign Up"}
             </Button>
