@@ -10,18 +10,25 @@ type Donation = {
   amount: number;
   createdAt: string;
   specialMessage: string;
-  socialURLOrBuyMeACoffee: string
-}
+  socialURLOrBuyMeACoffee: string;
+  donor: {
+    username: string;
+  };
+};
 
 const DonationCard = ({ donation }: { donation: Donation }) => (
   <Badge className="flex bg-[#151719] flex-col p-4 items-start gap-4 w-full rounded-[16px] border-2 border-gray-800 ">
       
     <div className="w-full flex justify-between items-center">
-   <div className='flex gap-[20px]'>
+   <div className='flex gap-[20px] items-center'>
 
   
       <div className="w-9 h-9 rounded-full bg-white" />
+      <div className='flex flex-col'>
+      <p>{donation.donor.username}</p> 
       <p className='text-white/50'>{donation.socialURLOrBuyMeACoffee}</p>
+      </div>
+    
       
       </div>
       <div>
@@ -35,13 +42,16 @@ const DonationCard = ({ donation }: { donation: Donation }) => (
     </div>
     <div className="p-2 rounded break-words whitespace-normal">
       {donation.specialMessage}
+     
+     
     </div>
   </Badge>
 )
 
-const RecentDonations = () => {
+const RecentDonations = ({ userId }: { userId: number }) => {
 
-const userId = 4
+
+// const userId = 16
 
 
   const [data, setData] = useState<Donation[]>([])
@@ -53,7 +63,9 @@ const userId = 4
       setLoading(true)
       try {
         const response = await axios.get(`http://localhost:8000/api/donation/received/${userId}`)
-        setData(response.data.receivedDonations || [])        
+        setData(response.data.receivedDonations || [])
+     
+              
       } catch (error) {
         console.error("Error fetching donations:", error)
         setData([]) 

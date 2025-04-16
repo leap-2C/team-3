@@ -5,7 +5,7 @@ import countryList from 'react-select-country-list';
 import { SingleValue } from 'react-select';
 import { GlareCard } from '@/components/ui/glare-card';
 import { useForm } from 'react-hook-form';
-import InputGroup from '@/components/InputGroup';
+import InputGroup from '../profile/_components/InputGroup';
 import { Button } from '@/components/ui/button';
 import ReactFlagsSelect from "react-flags-select";
 import { Input } from '@/components/ui/input';

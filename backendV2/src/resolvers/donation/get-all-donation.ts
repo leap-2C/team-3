@@ -4,32 +4,43 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 const getAllDonation = async (req: Request, res: Response): Promise<void> => {
-  const { userId } = req.params; //route deer bga :userId g avna
+  const { userId } = req.params;
 
   try {
     const userExists = await prisma.user.findUnique({
       where: {
-        id: parseInt(userId),//avsan userId gaaraa id hesgees haij bga ym shig bgan
+        id: parseInt(userId),
       },
     });
 
     if (!userExists) {
-      res.status(404).json({ error: "User not found" }); //user oldohgu uyed
+      res.status(404).json({ error: "User not found" });
       return;
-    } 
+    }
 
-    const sentDonations = await prisma.donation.findMany({//donation model
+    const receivedDonations = await prisma.donation.findMany({
       where: {
-        donorId: parseInt(userId), //donorId (don hiisen hun) hesgees userId gaar haigaad bga ym shig l bnleshd
+        recipientId: parseInt(userId),
+      },
+      include: {
+        donor: {
+          select: {
+            username: true,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: 'desc',
       },
     });
 
-    if (sentDonations.length === 0 ) { //don hiigegu bvl msg yvuulna
-      res.json("no donations sent")
-        return;
+    if (receivedDonations.length === 0) {
+      res.json("no donations sent");
+      return;
     }
+
     res.status(200).json({
-      sentDonations,
+      receivedDonations,
     });
   } catch (error) {
     console.error("Error fetching sent donations:", error);
