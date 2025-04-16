@@ -1,6 +1,6 @@
 "use client";
 
-import { SignUpForm } from "@/components/RegisterForm";
+import SignUpForm from "@/components/RegisterForm";
 import { Button } from "@/components/ui/button";
 import {
   Carousel,
@@ -32,8 +32,8 @@ const SignIn = () => {
           </Carousel>
         </div>
         <div className="flex flex-col gap-4 p-6 md:p-10">
-          <div className="w-full flex justify-center items-center mt-20 -mb-20">
-            <img src={Logo.src} width={150} />
+          <div className="w-full flex justify-center items-center mt-20 -mb-10">
+            <img src={Logo.src} width={120} />
           </div>
           <div className="flex justify-center gap-2 md:justify-start"></div>
           <div className="flex flex-1 items-center justify-center">
