@@ -4,7 +4,7 @@ export default function ProfileCard() {
   return (
     <div className="bg-white rounded-2xl shadow-lg overflow-hidden ">
       <div className="relative">
-        <div className="w-[362px] h-[128px]  ">
+        <div className="w-[362px] h-[128px] ">
           <Image
             src="/akatsuki.png"
             alt="Banner"
