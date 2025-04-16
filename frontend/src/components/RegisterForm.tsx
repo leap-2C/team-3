@@ -10,20 +10,24 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import Cookies from "js-cookie";
 import axios from "axios";
+import { useSearchParams } from "next/navigation";
 
-const API_URL = process.env.API_URL;
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export function SignUpForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"form">) {
+  const searchParams = useSearchParams();
+  const type = searchParams.get("type");
+
   const [data, setData] = useState({
-    name: "",
+    username: "",
     email: "",
     password: "",
-    confirmPassword: "",
   });
-  const [activeTab, setActiveTab] = useState("signup");
+
+  const [activeTab, setActiveTab] = useState(type ? type : "signup");
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
@@ -35,32 +39,25 @@ export function SignUpForm({
     e.preventDefault();
     setIsLoading(true);
     try {
-      console.log(`HI`);
-      const endpoint = activeTab === "signup" ? "sign-up" : "sign-in";
+      const endpoint = activeTab === "signup" ? "signup" : "signin";
       const res = await axios.post(`${API_URL}/api/auth/${endpoint}`, data, {
         withCredentials: true,
       });
+      console.log(res);
       setIsLoading(false);
-
-      if (activeTab === "signup") {
-        toast.success("Account created successfully");
-      } else {
-        toast.success("Logged in successfully");
-      }
-      if (activeTab === "signup") {
-        const token = res.data.data.token;
-        Cookies.set("token", token, { expires: 7, path: "/" });
-        router.push("/home");
-      } else {
-        router.push("/home");
-      }
+      // if (endpoint === "signup") {
+      //   toast.success("Account created successfully");
+      // } else {
+      //   toast.success("Logged in successfully");
+      // }
+      const token = res.data.data.accessToken;
+      console.log(token);
+      Cookies.set("token", token, { expires: 7, path: "/" });
+      router.push("/home");
     } catch (err: any) {
       setIsLoading(false);
       console.error(err);
       toast.error(err.response.data.message);
-      if (err.response.status === 404) {
-        toast.error("Server not found");
-      }
     }
   };
 
@@ -71,14 +68,17 @@ export function SignUpForm({
       onSubmit={fetchAuth}
     >
       <div className="flex flex-col items-center gap-2 text-center">
-        <h1 className="text-4xl font-extrabold">Create an Account</h1>
+        <h1 className="text-4xl font-extrabold">
+          {activeTab === "signup" && "Create an Account"}
+          {activeTab === "signin" && "Welcome Back"}
+        </h1>
         <p className="text-balance text-sm text-[var(--foreground)]/40 -mt-2">
           Please enter your details wisely
         </p>
       </div>
       <div className="w-full flex flex-col justify-center items-center">
         <Tabs
-          defaultValue="signup"
+          defaultValue={activeTab}
           className="w-3/4"
           onValueChange={(value) => setActiveTab(value)}
         >
@@ -91,6 +91,24 @@ export function SignUpForm({
             </TabsTrigger>
           </TabsList>
           <TabsContent value="signup" className="flex flex-col gap-4 w-full">
+            <div className="bg-[var(--background)] rounded-2xl border-[#EEEEEE] border-2 w-full flex flex-row justify-center items-center gap-4 py-1">
+              <UserRound width={23} strokeWidth={1.5} className="ml-5" />
+              <hr className="border-r-1 border-[#EEEEEE] h-8" />
+              <div className="flex flex-col w-full py-2 px-1">
+                <p className="text-[10px] text-[var(--foreground)]/50 font-bold -mb-[2px]">
+                  Username
+                </p>
+                <Input
+                  id="username"
+                  type="text"
+                  name="username"
+                  placeholder="Pick a cool username"
+                  value={data.username}
+                  onChange={handleChange}
+                  className="bg-[var(--background)] text-sm text-[var(--foreground)] shadow-none w-full h-6 border-none pl-0 rounded-none font-bold focus-visible:ring-0"
+                />
+              </div>
+            </div>
             <div className="bg-[var(--background)] rounded-2xl border-[#EEEEEE] border-2 w-full flex flex-row justify-center items-center gap-4 py-1">
               <Mail width={23} strokeWidth={1.5} className="ml-5" />
               <hr className="border-r-1 border-[#EEEEEE] h-8" />
@@ -164,11 +182,11 @@ export function SignUpForm({
                   Name
                 </p>
                 <Input
-                  id="name"
+                  id="username"
                   type="text"
-                  name="name"
+                  name="username"
                   placeholder="eg. John"
-                  value={data.name}
+                  value={data.username}
                   onChange={handleChange}
                   required
                   className="bg-[var(--background)] text-sm text-[var(--foreground)] shadow-none w-full h-6 border-none pl-0 rounded-none font-bold focus-visible:ring-0"
