@@ -20,7 +20,7 @@ const getAllDonation = async (req: Request, res: Response): Promise<void> => {
 
     const sentDonations = await prisma.donation.findMany({//donation model
       where: {
-        donorId: parseInt(userId), //donorId (don hiisen hun) hesgees userId gaar haigaad bga ym shig l bnleshd
+        recipientId: parseInt(userId), //donorId (don hiisen hun) hesgees userId gaar haigaad bga ym shig l bnleshd
       },
     });
 
