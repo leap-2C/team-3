@@ -36,12 +36,16 @@ const Home = () => {
           </ul>
         </div>
         <div className="flex items-center gap-4">
-          <Button className="dark p-6 rounded-xl font-bold hover:scale-105">
-            Sign in
-          </Button>
-          <Button className="p-6 rounded-xl font-bold hover:scale-105">
-            Dashboard
-          </Button>
+          <Link href={`/auth/sign-in?type=signin`}>
+            <Button className="dark p-6 rounded-xl font-bold hover:scale-105">
+              Sign in
+            </Button>
+          </Link>
+          <Link href={`/dashboard`}>
+            <Button className="p-6 rounded-xl font-bold hover:scale-105">
+              Dashboard
+            </Button>
+          </Link>
         </div>
       </div>
       {/* END */}
@@ -124,7 +128,7 @@ const Home = () => {
             <p className="py-2 px-4 w-fit bg-[#ffffff] rounded-full text-sm font-bold flex justify-center items-center">
               Designed for creators
             </p>
-            <p className="text-5xl font-extrabold w-[700px]">
+            <p className="text-5xl font-extrabold xl:w-3/4">
               We don't call them "customers" or transactions. They are your
               supporters.
             </p>
@@ -132,7 +136,7 @@ const Home = () => {
               Learn more
             </Button>
           </div>
-          <img src={Sticker.src} width={340} />
+          <img src={Sticker.src} width={340} className="hidden xl:flex" />
         </div>
         <div className="w-full h-auto flex justify-center gap-5">
           <div className="w-3/4 py-18  h-auto aspect-6/3 bg-[#CAB3F8] rounded-3xl hover:scale-95 transition-all duration-200 ease-in-out flex flex-col justify-center group cursor-pointer p-12 gap-5">
@@ -171,11 +175,12 @@ const Home = () => {
       {/* Section2 */}
       <section className="w-full flex flex-col justify-center items-center gap-2 light pb-96">
         <p className="text-[var(--background)] font-bold text-4xl">
-          Built for modern teams
+          Your privacy comes first
         </p>
         <p className="text-[var(--background)]/50 text-base text-center font-medium">
-          Crafted with customizability and collaboration in mind.
-          <br /> Designed to impress.
+          Receive fan support safely without disclosing your identity or
+          <br />
+          address. We’ll do the heavy-lifting.
         </p>
         <div className="w-5/8 flex justify-center items-center gap-6 mt-10">
           <div className="w-full h-auto aspect-4/5 bg-[#ffffff08] hover:bg-[#ffffff12] relative rounded-2xl overflow-hidden group cursor-pointer transition-all">
