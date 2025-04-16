@@ -1,9 +1,9 @@
 "use client";
 
 import { CircleCheck, CircleX, Link2 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "./ui/button";
-
+import axios from "axios";
 interface StepOneProps {
   inputValue: { url: string };
   setInputValue: any;
@@ -11,6 +11,33 @@ interface StepOneProps {
 }
 
 const StepOne = ({ inputValue, setInputValue, stepNext }: StepOneProps) => {
+  const [isUrlAvailable, setIsUrlAvailable] = useState(false);
+  
+
+
+
+
+  //Backend ees data avch baigaa code 
+  // const [fetchedData, setFetchedData] = useState("");
+  // useEffect(() => {
+  //   try {
+  //     const response = axios
+  //       .get("https://team-3-4qbb.onrender.com/api/profile/explore")
+  //       .then((response) => {
+  //         console.log(response.data);
+  //         setFetchedData(response.data);
+  //       })
+  //       .catch((error) => {
+  //         console.error("Error fetching data:", error);
+  //       });
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }, []);
+
+  // const checkIfUrlAvailable = () => {
+  //   fetchedData.map(() => {});
+  // };
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.replace(/\s+/g, "");
     setInputValue((prev: { url: string }) => ({ ...prev, url: value }));
@@ -45,8 +72,7 @@ const StepOne = ({ inputValue, setInputValue, stepNext }: StepOneProps) => {
             </div>
             <Button
               onClick={stepNext}
-              className="py-[34px] aspect-4/3 bg-[#0363FB] hover:bg-[#0362fbde] rounded-2xl"
-            >
+              className="py-[34px] aspect-4/3 bg-[#0363FB] hover:bg-[#0362fbde] rounded-2xl">
               GO
             </Button>
           </div>
