@@ -85,11 +85,22 @@ export function SignUpForm({
       const request = axios.post(`${API_URL}/api/auth/${endpoint}`, data, {
         withCredentials: true,
       });
-      const res = await Promise.race([request, timeout]);
-      const token = (res as any).data.data.accessToken;
-      setUser(res.data.data.user);
+      const res = (await Promise.race([request, timeout])) as {
+        data: { data: { accessToken: string; user: any } };
+      };
+      const token = res.data.data.accessToken;
+      const userData = res.data.data.user;
       Cookies.set("token", token, { expires: 999, path: "/" });
-      router.push("/home");
+      Cookies.set("user", JSON.stringify(userData), {
+        expires: 999,
+        path: "/",
+      });
+      setUser(userData);
+      if (endpoint === "signup") {
+        router.push("/profile");
+      } else {
+        router.push("/home");
+      }
     } catch (err: any) {
       toast.error(err.response?.data?.message || "Network error");
       console.error(err);
