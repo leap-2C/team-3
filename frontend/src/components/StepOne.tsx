@@ -1,7 +1,7 @@
 "use client";
 
 import { CircleCheck, CircleX, Link2 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "./ui/button";
 
 interface StepOneProps {
@@ -11,6 +11,39 @@ interface StepOneProps {
 }
 
 const StepOne = ({ inputValue, setInputValue, stepNext }: StepOneProps) => {
+  const [available, setAvailable] = useState<boolean | null>(null);
+  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    if (!inputValue.url) {
+      setAvailable(null);
+      return;
+    }
+    const timeout = setTimeout(() => {
+      checkUrl(inputValue.url);
+    }, 500); // debounce
+
+    return () => clearTimeout(timeout);
+  }, [inputValue.url]);
+  const checkUrl = async (val: string) => {
+    setLoading(true);
+    try {
+      const res = await fetch("http://localhost:8000/api/check/custom-url", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ socialMediaURL: val }),
+      });
+
+      const data = await res.json();
+      console.log(res);
+      setAvailable(data.available);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.replace(/\s+/g, "");
     setInputValue((prev: { url: string }) => ({ ...prev, url: value }));
@@ -45,19 +78,25 @@ const StepOne = ({ inputValue, setInputValue, stepNext }: StepOneProps) => {
             </div>
             <Button
               onClick={stepNext}
-              className="py-[34px] aspect-4/3 bg-[#0363FB] hover:bg-[#0362fbde] rounded-2xl"
-            >
+              disabled={!available}
+              className="py-[34px] aspect-4/3 bg-[#0363FB] hover:bg-[#0362fbde] rounded-2xl">
               GO
             </Button>
           </div>
-          <p className="text-sm text-[#00FF7B] mt-4 flex items-center gap-2">
-            <CircleCheck width={17} />
-            Magic URL is available
-          </p>
-          <p className="text-sm text-red-400 mt-4 flex items-center gap-2">
-            <CircleX width={17} />
-            Magic URL is not available
-          </p>
+
+          {loading && <p className="text-sm text-gray-500">Checking...</p>}
+          {available === true && (
+            <p className="text-sm text-[#00FF7B] mt-4 flex items-center gap-2">
+              <CircleCheck width={17} />
+              Magic URL is available
+            </p>
+          )}
+          {available === false && (
+            <p className="text-sm text-red-400 mt-4 flex items-center gap-2">
+              <CircleX width={17} />
+              Magic URL is not available
+            </p>
+          )}
         </div>
       </div>
     </>

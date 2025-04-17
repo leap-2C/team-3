@@ -6,6 +6,7 @@ import { PrismaClient } from "@prisma/client";
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
+import { URLrouter } from "./routes/check-url-routes";
 
 dotenv.config();
 const app = express();
@@ -33,7 +34,7 @@ app.use("/api/donation", donationRoute);
 app.use("/api/bankcard", bankCardRoute);
 app.use("/api/auth", authRoute);
 app.use("/api/profile", userRoute);
-
+app.use("/api/check", URLrouter);
 app.get("/api", (req, res) => {
   res.send("API is running...");
 });
