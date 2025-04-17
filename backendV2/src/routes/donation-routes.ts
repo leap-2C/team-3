@@ -1,0 +1,10 @@
+import express from "express";
+import createDonation from "../resolvers/donation/create-donation";
+import getTotalAmount from "../resolvers/donation/get-total-amount";
+import getSentDonation from "../resolvers/donation/get-sent-donation";
+import getAllDonation from "../resolvers/donation/get-all-donation";
+export const donationRoute = express.Router();
+donationRoute.post("/create-donation", createDonation);
+donationRoute.get("/total-earnings/:userId", getTotalAmount);
+donationRoute.get("/search-donations/:userId", getSentDonation);
+donationRoute.get("/received/:userId", getAllDonation);
