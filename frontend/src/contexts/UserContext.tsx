@@ -1,57 +1,58 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect } from "react";
-import axios from "axios";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
+import Cookies from "js-cookie";
 
-interface User {
-  id: number;
+type UserType = {
+  id: string;
   username: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  avatarImage: string;
-  backgroundImage: string;
-}
+  email?: string;
+};
 
-interface UserContextType {
-  user: User | null;
-  setUser: (user: User | null) => void;
-  fetchUser: () => Promise<void>;
-}
+type UserContextType = {
+  user: UserType | null;
+  setUser: (user: UserType | null) => void;
+};
 
-const UserContext = createContext<UserContextType | undefined>(undefined);
+const UserContext = createContext<UserContextType>({
+  user: null,
+  setUser: () => {},
+});
 
-export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
+export const useUser = () => useContext(UserContext);
 
-  // Function to fetch user data from the backend
-  const fetchUser = async () => {
-    try {
-      const response = await axios.get("/api/user"); // Replace with your backend endpoint
-      setUser(response.data);
-    } catch (error) {
-      console.error("Failed to fetch user data:", error);
-      setUser(null);
-    }
-  };
+export const UserProvider = ({ children }: { children: ReactNode }) => {
+  const [user, setUser] = useState<UserType | null>(null);
+  console.log(user);
 
-  // Fetching
   useEffect(() => {
-    fetchUser();
+    const userData = Cookies.get("user");
+    if (userData) {
+      try {
+        setUser(JSON.parse(userData));
+      } catch (err) {
+        console.error("can't set user data without a valid cookie");
+      }
+    }
   }, []);
 
+  useEffect(() => {
+    if (user) {
+      Cookies.set("user", JSON.stringify(user));
+    } else {
+      Cookies.remove("user");
+    }
+  }, [user]);
+
   return (
-    <UserContext.Provider value={{ user, setUser, fetchUser }}>
+    <UserContext.Provider value={{ user, setUser }}>
       {children}
     </UserContext.Provider>
   );
-};
-
-// Custom hook to use the UserContext
-export const useUser = (): UserContextType => {
-  const context = useContext(UserContext);
-  if (!context) {
-    throw new Error("useUser must be used within a UserProvider");
-  }
-  return context;
 };
