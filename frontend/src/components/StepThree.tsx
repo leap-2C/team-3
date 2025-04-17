@@ -211,10 +211,10 @@ const StepThree: React.FC<StepThreeProps> = ({
       </form>
 
       <div className="w-[470px] h-[270px]">
-        <GlareCard className="bg-gradient-to-b from-blue-600 to-blue-800 w-[470px] h-[270px] border-[#969696] flex flex-col justify-between">
-          <div className="flex items-center justify-between px-6">
+        <GlareCard className="bg-gradient-to-b from-blue-600 to-blue-800 border-[#969696] flex flex-col justify-between">
+          <div className="flex items-center justify-between px-6 w-full h-14">
             <div className="flex gap-1">
-              <Cpu className="opacity-50" />
+              <Cpu className="opacity-50 w-5" />
               <Wifi className="rotate-90 opacity-50 w-5" />
             </div>
             <Visa />
