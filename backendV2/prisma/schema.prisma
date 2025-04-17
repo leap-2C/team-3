@@ -30,7 +30,7 @@ model Profile {
   name            String
   about           String
   avatarImage     String
-  socialMediaURL  String
+  socialMediaURL  String @unique
   backgroundImage String
   successMessage  String
   user            User?
