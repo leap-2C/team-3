@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from "express";
 
 interface AuthRequest extends Request {
-  user?: {
-    userId: string;
+  profile?: {
+    profileId: string;
   };
 }
 
@@ -11,17 +11,17 @@ export const checkProfileEdit = (
   res: Response,
   next: NextFunction
 ): void => {
-  const userIdFromParams = req.params.userId;
-  const userIdFromToken = req.user?.userId;
+  const profileIdFromParams = req.params.profileId;
+  const profileIdFromToken = req.profile?.profileId;
 
-  if (!userIdFromToken) {
+  if (!profileIdFromToken) {
     res.status(401).json({
     success: false,
     message: "You must be logged in to edit a profile.",
     });
   }
 
-  if (userIdFromParams !== userIdFromToken) {
+  if (profileIdFromParams !== profileIdFromToken) {
     res.status(403).json({
     success: false,
     message: "You are not authorized to edit this profile.",
