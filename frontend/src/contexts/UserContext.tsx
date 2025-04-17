@@ -1,6 +1,6 @@
 "use client";
 
-import React, {
+import {
   createContext,
   useContext,
   useState,
@@ -10,9 +10,10 @@ import React, {
 import Cookies from "js-cookie";
 
 type UserType = {
-  id: string;
+  id: number;
   username: string;
   email?: string;
+  // Add any other fields you care about
 };
 
 type UserContextType = {
@@ -29,26 +30,20 @@ export const useUser = () => useContext(UserContext);
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<UserType | null>(null);
-  console.log(user);
 
   useEffect(() => {
-    const userData = Cookies.get("user");
-    if (userData) {
+    const cookieData = Cookies.get("user");
+    console.log("💾 Cookie on load:", cookieData);
+
+    if (cookieData) {
       try {
-        setUser(JSON.parse(userData));
-      } catch (err) {
-        console.error("can't set user data without a valid cookie");
-      }
+        const parsed = JSON.parse(cookieData);
+        setUser(parsed);
+      } catch (err) {}
+    } else {
+      console.warn("No user cookie found");
     }
   }, []);
-
-  useEffect(() => {
-    if (user) {
-      Cookies.set("user", JSON.stringify(user));
-    } else {
-      Cookies.remove("user");
-    }
-  }, [user]);
 
   return (
     <UserContext.Provider value={{ user, setUser }}>
