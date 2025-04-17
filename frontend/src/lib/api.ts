@@ -43,3 +43,25 @@ export const patchUserData = async (data: any, id: string) => {
     throw error;
   }
 };
+
+export const getReceivedDonations = async (id: string) => {
+  console.log(id, `HELLO2`);
+  try {
+    const token = Cookies.get("token");
+    const response = await fetch(`${API_URL}/api/donation/received/${id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token && { Authorization: `Bearer ${token}` }),
+      },
+    });
+    if (!response.ok) {
+      throw new Error("Failed to patch user data");
+    }
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error("patchUserData error:", error);
+    throw error;
+  }
+};

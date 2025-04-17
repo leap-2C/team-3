@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { UserProvider } from "@/lib/UserContext";
+import { UserProvider } from "@/contexts/UserContext";
 import "./globals.css";
 
 export const metadata: Metadata = {
