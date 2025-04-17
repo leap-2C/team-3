@@ -11,6 +11,7 @@ import { validateSignUp, validateSignIn } from "@/utils/validateAuth";
 import FormHeader from "@/components/auth/FormHeader";
 import InputField from "@/components/auth/InputField";
 import PasswordRequirements from "@/components/auth/PasswordRequirements";
+import { useUser } from "@/lib/UserContext";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -28,6 +29,7 @@ export function SignUpForm({
   const searchParams = useSearchParams();
   const type = searchParams.get("type");
   const router = useRouter();
+  const { setUser } = useUser();
 
   const [data, setData] = useState<FormData>({
     username: "",
@@ -85,13 +87,12 @@ export function SignUpForm({
       });
       const res = await Promise.race([request, timeout]);
       const token = (res as any).data.data.accessToken;
-      console.log(res);
+      setUser(res.data.data.user);
       Cookies.set("token", token, { expires: 999, path: "/" });
       router.push("/home");
     } catch (err: any) {
       toast.error(err.response?.data?.message || "Network error");
       console.error(err);
-    } finally {
       setIsLoading(false);
     }
   };
