@@ -6,6 +6,7 @@ import axios from 'axios'
 
 const ChangeAvatar = ({ onAvatarUploaded }: { onAvatarUploaded: (url: string) => void }) => {
   const CLOUD_NAME = process.env.NEXT_PUBLIC_CLOUDINARY_NAME
+console.log("this"+CLOUD_NAME);
 
   const handleInput = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
@@ -13,7 +14,8 @@ const ChangeAvatar = ({ onAvatarUploaded }: { onAvatarUploaded: (url: string) =>
 
     const formData = new FormData()
     formData.append('file', file)
-    formData.append('upload_preset', 'updata')
+    formData.append('upload_preset', 'Covaar')
+
 
     try {
       const res = await axios.post(
@@ -21,6 +23,8 @@ const ChangeAvatar = ({ onAvatarUploaded }: { onAvatarUploaded: (url: string) =>
         formData
       )
       const imageUrl = res.data.secure_url
+     
+      
       onAvatarUploaded(imageUrl)
     } catch (err) {
       console.error('Upload failed:', err)

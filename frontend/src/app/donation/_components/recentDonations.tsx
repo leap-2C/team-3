@@ -17,6 +17,7 @@ type Donation = {
 };
 
 const DonationCard = ({ donation }: { donation: Donation }) => (
+  
   <Badge className="flex bg-[#151719] flex-col p-4 items-start gap-4 w-full rounded-[16px] border-2 border-gray-800 ">
       
     <div className="w-full flex justify-between items-center">
@@ -48,12 +49,7 @@ const DonationCard = ({ donation }: { donation: Donation }) => (
   </Badge>
 )
 
-const RecentDonations = ({ userId }: { userId: number }) => {
-
-
-// const userId = 16
-
-
+const RecentDonations = ({userId} :{userId:number}) => {
   const [data, setData] = useState<Donation[]>([])
   const [loading, setLoading] = useState<boolean>(true)
   const [showAll, setShowAll] = useState(false)
@@ -64,7 +60,8 @@ const RecentDonations = ({ userId }: { userId: number }) => {
       try {
         const response = await axios.get(`http://localhost:8000/api/donation/received/${userId}`)
         setData(response.data.receivedDonations || [])
-     
+console.log(response.data);
+
               
       } catch (error) {
         console.error("Error fetching donations:", error)
