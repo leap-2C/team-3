@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { UserProvider } from '@/contexts/UserContext';
+import { UserProvider } from "@/lib/UserContext";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -16,7 +16,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <UserProvider>{children}</UserProvider>
-        </body>
+      </body>
     </html>
   );
 }
