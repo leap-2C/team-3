@@ -27,10 +27,11 @@ export const signUp = async (
 ): Promise<void> => {
   try {
     const { username, password, email, firstName, lastName } = req.body;
-
+  
+    const lowerCaseUsername = username.toLowerCase();
     // username dawhtsaj baigaa uguig shalgana
     const existingUser = await prisma.user.findUnique({
-      where: { username },
+      where: { username: lowerCaseUsername },
     });
 
     if (existingUser) {
@@ -56,7 +57,7 @@ export const signUp = async (
     // Create a new user with verification code
     const newUser = await prisma.user.create({
       data: {
-        username,
+        username: lowerCaseUsername,
         password: hashedPassword,
         email,
         firstName: firstName || "",
