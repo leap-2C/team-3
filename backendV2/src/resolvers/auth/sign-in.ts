@@ -73,7 +73,7 @@ export const signIn = async (
     });
 
     // Remove password from user data before sending it to the client
-    const { password: userPassword, ...userInfo } = user;
+    const { password: userPassword,verificationCode: userVerificationCode, ...userInfo } = user;
 
     // Send response with both access token and user data
     res.status(200).json({
