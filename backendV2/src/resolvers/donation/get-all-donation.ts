@@ -4,16 +4,25 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 const getAllDonation = async (req: Request, res: Response): Promise<void> => {
+<<<<<<< HEAD
   const { userId } = req.params;
+=======
+  const { userId } = req.params; //route deer bga :userId g avna
+>>>>>>> main
 
   try {
     const userExists = await prisma.user.findUnique({
       where: {
+<<<<<<< HEAD
         id: parseInt(userId),
+=======
+        id: parseInt(userId),//avsan userId gaaraa id hesgees haij bga ym shig bgan
+>>>>>>> main
       },
     });
 
     if (!userExists) {
+<<<<<<< HEAD
       res.status(404).json({ error: "User not found" });
       return;
     }
@@ -41,6 +50,24 @@ const getAllDonation = async (req: Request, res: Response): Promise<void> => {
 
     res.status(200).json({
       receivedDonations,
+=======
+      res.status(404).json({ error: "User not found" }); //user oldohgu uyed
+      return;
+    } 
+
+    const sentDonations = await prisma.donation.findMany({//donation model
+      where: {
+        donorId: parseInt(userId), //donorId (don hiisen hun) hesgees userId gaar haigaad bga ym shig l bnleshd
+      },
+    });
+
+    if (sentDonations.length === 0 ) { //don hiigegu bvl msg yvuulna
+      res.json("no donations sent")
+        return;
+    }
+    res.status(200).json({
+      sentDonations,
+>>>>>>> main
     });
   } catch (error) {
     console.error("Error fetching sent donations:", error);

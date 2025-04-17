@@ -123,12 +123,16 @@
   * {
     @apply border-border outline-ring/50;
   }
+<<<<<<< HEAD
 
+=======
+>>>>>>> main
   body {
     @apply bg-background text-foreground;
     font-family: Manrope;
   }
 }
+<<<<<<< HEAD
 
 .ReactFlagsSelect-module_selectBtn__19wW7 {
   border: none !important;
@@ -172,3 +176,5 @@ input::-webkit-inner-spin-button {
 input[type=number] {
   -moz-appearance: textfield;
 }
+=======
+>>>>>>> main
