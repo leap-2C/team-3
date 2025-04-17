@@ -19,8 +19,8 @@ type Profile = {
   backgroundImage: string;
   avatarImage: string;
 };
-const DonationProfile = ({ userId }: { userId: number }) => {
-  const profileId = 1
+const DonationProfile = ({ userId,profileId }: { userId: number, profileId:number }) => {
+
   const [profileData, setProfileData] = useState<Profile | null>(null)
   const fetchProfile = async () => {
     try {
@@ -57,7 +57,7 @@ const DonationProfile = ({ userId }: { userId: number }) => {
         avatarImage: url
       })
       setProfileData(prev => prev ? { ...prev, avatarImage: url } : prev)
-      toast.success("Avatar image updated!") // Fixed message
+      toast.success("Avatar image updated!") 
     } catch (err) {
       console.error("Failed to update avatar image", err)
       toast.error("Failed to update avatar image")

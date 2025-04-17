@@ -11,20 +11,26 @@ const ChangeCover = ({ onCoverUploaded }: Props) => {
   const handleInput = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
     if (!file) return
+    
     const formData = new FormData()
     formData.append('file', file)
-    formData.append('upload_preset', 'updata')
+    formData.append('upload_preset', 'Covaar')
+  
     try {
       const res = await axios.post(
         `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
         formData
       )
+      
       const imageUrl = res.data.secure_url
-      onCoverUploaded(imageUrl)
+      console.log("Cover Image URL:", imageUrl) // Log the returned URL
+      
+      onCoverUploaded(imageUrl)  // Pass the URL to parent component
     } catch (err) {
       console.error('Upload failed:', err)
     }
   }
+  
   return (
     <div className='absolute top-[20px] right-[20px]'>
       <Button

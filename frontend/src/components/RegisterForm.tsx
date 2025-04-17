@@ -14,6 +14,7 @@ import PasswordRequirements from "@/components/auth/PasswordRequirements";
 import { useUser } from "@/lib/UserContext";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
+console.log("asda"+API_URL);
 
 interface FormData {
   username: string;
@@ -87,7 +88,7 @@ export function SignUpForm({
       });
       const res = await Promise.race([request, timeout]);
       const token = (res as any).data.data.accessToken;
-      setUser(res.data.data.user);
+
       Cookies.set("token", token, { expires: 999, path: "/" });
       router.push("/home");
     } catch (err: any) {

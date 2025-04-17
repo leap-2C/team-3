@@ -10,7 +10,7 @@ import 'react-toastify/dist/ReactToastify.css'
 const CreateDonation = ({ userId, receiverId}: { userId: number; receiverId: number }) => {
   const API_URL = 'http://localhost:3000'
   // process.env.API_URL;
-console.log(API_URL);
+
 
   const [selected, setSelected] = useState<number>(1)
   const [formData, setFormData] = useState({
