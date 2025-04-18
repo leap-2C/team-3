@@ -27,15 +27,32 @@ export const signUp = async (
 ): Promise<void> => {
   try {
     const { username, password, email, firstName, lastName } = req.body;
-  
+
     const lowerCaseUsername = username.toLowerCase();
-    // username dawhtsaj baigaa uguig shalgana
-    const existingUser = await prisma.user.findUnique({
+
+    // Check if username already exists
+    const existingUsername = await prisma.user.findUnique({
       where: { username: lowerCaseUsername },
     });
 
-    if (existingUser) {
+    if (existingUsername) {
       const error = new Error("Username already exists") as StatusCodeError;
+      error.statusCode = 400;
+      res.status(400).json({
+        success: false,
+        message: error.message,
+        statusCode: error.statusCode,
+      });
+      return;
+    }
+
+    // Check if email already exists
+    const existingEmail = await prisma.user.findUnique({
+      where: { email },
+    });
+
+    if (existingEmail) {
+      const error = new Error("Email already exists") as StatusCodeError;
       error.statusCode = 400;
       res.status(400).json({
         success: false,
@@ -92,7 +109,7 @@ export const signUp = async (
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
 
-    // passiig hasaj baina
+    // Remove sensitive user data like password and verificationCode before sending response
     const { password: _, verificationCode: __, ...safeUserData } = newUser;
 
     // Send response
@@ -107,6 +124,8 @@ export const signUp = async (
       },
     });
   } catch (err) {
+    console.error(err); // Log the error for debugging purposes
     res.status(500).json({ success: false, message: "Server error" });
   }
 };
+
