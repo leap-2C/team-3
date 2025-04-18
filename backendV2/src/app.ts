@@ -13,7 +13,7 @@ const app = express();
 const prisma = new PrismaClient();
 const port = process.env.PORT || 8000;
 
-const allowedOrigins = ["http://localhost:3000"];
+const allowedOrigins = ["https://buymecoffe.vercel.app"];
 
 app.use(
   cors({
