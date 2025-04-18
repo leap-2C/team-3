@@ -55,9 +55,11 @@ export const signIn = async (
     }
 
     // Generate access token
-    const accessToken = jwt.sign({ userId: user.id }, TOKEN_SECRET, {
-      expiresIn: "15m", // 15 minutes for access token expiry
-    });
+    const accessToken = jwt.sign(
+      { userId: user.id, profileId: user.profileId },  // Include profileId here
+      process.env.TOKEN_SECRET || "",
+      { expiresIn: "15m" }
+    );
 
     // Generate refresh token
     const refreshToken = jwt.sign({ userId: user.id }, TOKEN_SECRET, {
@@ -83,6 +85,7 @@ export const signIn = async (
         accessToken,
         refreshToken,
         user: userInfo,
+        profileId: user.profileId,
       },
     });
   } catch (err) {

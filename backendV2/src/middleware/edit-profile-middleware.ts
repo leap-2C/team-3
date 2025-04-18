@@ -6,27 +6,45 @@ interface AuthRequest extends Request {
   };
 }
 
-export const checkProfileEdit = (
+export const checkProfileEdit = async (
   req: AuthRequest,
   res: Response,
   next: NextFunction
-): void => {
-  const profileIdFromParams = req.params.profileId;
-  const profileIdFromToken = req.profile?.profileId;
+): Promise<void> => {
+  try {
+    const profileIdFromParams = req.params.profileId;
+    const profileIdFromToken = req.profile?.profileId;
 
-  if (!profileIdFromToken) {
-    res.status(401).json({
-    success: false,
-    message: "You must be logged in to edit a profile.",
+    console.log("Token:", profileIdFromToken, "Params:", profileIdFromParams);
+
+    if (!profileIdFromToken) {
+      throw new Error("You must be logged in to edit a profile.");
+    }
+
+    if (profileIdFromParams != profileIdFromToken) {
+      throw new Error("You are not authorized to edit this profile.");
+    }
+    next();
+  } catch (err: any) {
+
+    if (err.message === "You must be logged in to edit a profile.") {
+       res.status(401).json({
+        success: false,
+        message: err.message,
+      });
+    }
+
+    if (err.message === "You are not authorized to edit this profile.") {
+       res.status(403).json({
+        success: false,
+        message: err.message,
+      });
+    }
+
+    console.error("Unexpected error in checkProfileEdit:", err);
+     res.status(500).json({
+      success: false,
+      message: "An unexpected error occurred.",
     });
   }
-
-  if (profileIdFromParams !== profileIdFromToken) {
-    res.status(403).json({
-    success: false,
-    message: "You are not authorized to edit this profile.",
-    });
-  }
-
-  next();
 };
