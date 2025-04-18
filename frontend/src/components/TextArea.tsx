@@ -1,17 +1,17 @@
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { UseFormRegister, RegisterOptions } from "react-hook-form";
-import { ProfileFormData } from "../page";
+import { ProfileFormData } from "@/components/StepTwo";
 
 interface TextareaGroupProps {
-    id: keyof ProfileFormData;
-    label: string;
-    placeholder: string;
-    className?: string;
-    register: UseFormRegister<ProfileFormData>;
-    registerOptions?: RegisterOptions<ProfileFormData, keyof ProfileFormData>;
-    error?: string;
-  }
+  id: keyof ProfileFormData;
+  label: string;
+  placeholder: string;
+  className?: string;
+  register: UseFormRegister<ProfileFormData>;
+  registerOptions?: RegisterOptions<ProfileFormData, keyof ProfileFormData>;
+  error?: string;
+}
 
 export default function TextareaGroup({
   id,
@@ -41,5 +41,5 @@ export default function TextareaGroup({
     </div>
   );
 }
- 
+
 // check

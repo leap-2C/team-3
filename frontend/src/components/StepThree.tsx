@@ -25,7 +25,7 @@ type CountryOption = {
   value: string;
 };
 
-export type ProfileFormData = {
+export type bankCardData = {
   cardNumber: string;
   firstName: string;
   lastName: string;
@@ -66,7 +66,7 @@ const StepThree: React.FC<StepThreeProps> = ({
     formState: { errors },
     setValue,
     watch,
-  } = useForm<ProfileFormData>({
+  } = useForm<bankCardData>({
     defaultValues: {
       cardNumber: inputValue.cardNumber || "",
       firstName: inputValue.firstName || "",
@@ -85,8 +85,8 @@ const StepThree: React.FC<StepThreeProps> = ({
       }));
   }, []);
 
-  const onSubmit = (data: ProfileFormData) => {
-    setInputValue((prev: ProfileFormData) => ({ ...prev, ...data }));
+  const onSubmit = (data: bankCardData) => {
+    setInputValue((prev: bankCardData) => ({ ...prev, ...data }));
     stepNext();
   };
 

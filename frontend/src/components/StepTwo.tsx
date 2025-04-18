@@ -58,11 +58,11 @@ const StepTwo: React.FC<StepTwoProps> = ({
     cover: { file: null, preview: null },
     profile: { file: null, preview: null },
   });
-  
+
   // const onSubmit = async (data: ProfileFormData) => {
   //   const avatarImageUrl = images.profile.file ? await uploadImage(images.profile.file) : null;
   //   const backgroundImageUrl = images.cover.file ? await uploadImage(images.cover.file) : null;
-    
+
   //   setInputValue((prev: StepTwoProps["inputValue"]) => ({
   //     ...prev,
   //     username: data.username,
@@ -72,14 +72,14 @@ const StepTwo: React.FC<StepTwoProps> = ({
   //     avatarImage: avatarImageUrl,
   //     backgroundImage: backgroundImageUrl,
   //   }));
-    
+
   //   stepNext();
   // };
-  
+
   const onSubmit = async (data: ProfileFormData) => {
     const avatarImageUrl = images.profile.file ? await uploadImage(images.profile.file) : null;
     const backgroundImageUrl = images.cover.file ? await uploadImage(images.cover.file) : null;
-  
+
     const finalProfileData: ProfileFormData = {
       username: data.username,
       firstname: data.firstname,
@@ -88,24 +88,29 @@ const StepTwo: React.FC<StepTwoProps> = ({
       avatarImage: avatarImageUrl,
       backgroundImage: backgroundImageUrl,
     };
-  
+
     try {
-      await createProfile(finalProfileData); 
+      if (user?.id !== undefined) {
+        await createProfile(user.id, finalProfileData);
+      } else {
+        console.error("User ID is undefined. Cannot create profile.");
+        alert("User ID is missing. Please try again.");
+      }
       stepNext();
     } catch (error) {
       console.error("Failed to create profile:", error);
       alert("Failed to create profile. Please try again.");
     }
   };
-  
+
 
   useEffect(() => {
-    if(user) {
+    if (user) {
       console.log("user", user);
     }
-    
-  },[user, isLoading]);
-  
+
+  }, [user, isLoading]);
+
   //username haruulna
   useEffect(() => {
     if (user) {
@@ -128,20 +133,19 @@ const StepTwo: React.FC<StepTwoProps> = ({
         about: value.about || "",
       }));
     });
-  
+
     return () => subscription.unsubscribe();
   }, [watch, setInputValue]);
-  
-  
+
+
   // preview harahiin tuld formoos inputiin utguudiig hynaj haruulna
   const watchedValues = watch();
   const about = watch("about");
-  
+
   // URL copy hiine
   const handleCopyUrl = () => {
-    const urlToCopy = `https://buymecoffee.com/${
-      watchedValues.username || "username"
-    }`;
+    const urlToCopy = `https://buymecoffee.com/${watchedValues.username || "username"
+      }`;
 
     navigator.clipboard
       .writeText(urlToCopy)
@@ -157,7 +161,7 @@ const StepTwo: React.FC<StepTwoProps> = ({
     const formData = new FormData();
     formData.append("file", file);
     formData.append("upload_preset", "updata");
-  
+
     try {
       const res = await fetch(`https://api.cloudinary.com/v1_1/dvswnpwbg/image/upload`, {
         method: "POST",
@@ -256,7 +260,7 @@ const StepTwo: React.FC<StepTwoProps> = ({
             style={{
               backgroundImage: `url(${images.cover.preview || "https://shorturl.at/reOZ8"})`
             }}
-            
+
           >
             <div className="absolute opacity-0 bg-[var(--foreground)]/40 group-hover:opacity-100 transition-all cursor-pointer">
               <input
