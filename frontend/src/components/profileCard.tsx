@@ -45,25 +45,24 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({
             fill
           />
         </div>
-        <Link href="">
-          <button className="text-sm py-1 px-2 bg-white font-bold text-black absolute right-6 bottom-5 rounded-full hover:bg-gray-100">
-            <span className="mr-1">View Profile</span>
-            <ExternalLink
-              className="inline"
-              height={10}
-              width={10}
-              strokeWidth={3}
-            />
-          </button>
-        </Link>
+
+        <button className="text-sm py-1 px-2 bg-white font-bold text-black absolute right-6 bottom-5 rounded-full hover:bg-gray-100">
+          <span className="mr-1">View Profile</span>
+          <ExternalLink
+            className="inline"
+            height={10}
+            width={10}
+            strokeWidth={3}
+          />
+        </button>
       </div>
       <div className="p-4 pt-12">
         <h2 className="font-extrabold text-xl tracking-[-3%]">{name}</h2>
         <p className="text-[#000000] opacity-50 text-xs mt-[15px] font-medium">
           {about}
         </p>
-        <a
-          href={socialMediaURL}
+        <Link
+          href={`https://buymecoffe.vercel.app/profile/${socialMediaURL}`}
           target="_blank"
           rel="noopener noreferrer"
           className="text-[#167ab3] text-xs font-semibold mt-3 block">
@@ -73,8 +72,8 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({
             width={14}
             height={14}
           />
-          {socialMediaURL}
-        </a>
+          <div>https://buymecoffe.vercel.app/profile/{socialMediaURL}</div>
+        </Link>
       </div>
     </div>
   );
