@@ -4,6 +4,8 @@ import { CircleCheck, CircleX, Link2 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Button } from "./ui/button";
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
 interface StepOneProps {
   inputValue: { url: string };
   setInputValue: any;
@@ -20,14 +22,14 @@ const StepOne = ({ inputValue, setInputValue, stepNext }: StepOneProps) => {
     }
     const timeout = setTimeout(() => {
       checkUrl(inputValue.url);
-    }, 500); // debounce
+    }, 500); // debounces
 
     return () => clearTimeout(timeout);
   }, [inputValue.url]);
   const checkUrl = async (val: string) => {
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:8000/api/check/custom-url", {
+      const res = await fetch(`${API_URL}/api/check/custom-url`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -79,7 +81,8 @@ const StepOne = ({ inputValue, setInputValue, stepNext }: StepOneProps) => {
             <Button
               onClick={stepNext}
               disabled={!available}
-              className="py-[34px] aspect-4/3 bg-[#0363FB] hover:bg-[#0362fbde] rounded-2xl">
+              className="py-[34px] aspect-4/3 bg-[#0363FB] hover:bg-[#0362fbde] rounded-2xl"
+            >
               GO
             </Button>
           </div>

@@ -82,11 +82,20 @@ export function SignUpForm({
       const timeout = new Promise((_, reject) =>
         setTimeout(() => reject(new Error("Request timed out")), 5000)
       );
+      console.log(`FUNCTION`);
       const request = axios.post(`${API_URL}/api/auth/${endpoint}`, data, {
         withCredentials: true,
       });
-      const res = await Promise.race([request, timeout]);
-      const token = (res as any).data.data.accessToken;
+      const res = (await Promise.race([request, timeout])) as {
+        data: {
+          data: {
+            accessToken: string;
+            user: any;
+          };
+        };
+      };
+      console.log(`END`);
+      const token = res.data.data.accessToken;
       const userData = res.data.data.user;
       Cookies.set("token", token, { expires: 999, path: "/" });
       Cookies.set("user", JSON.stringify(userData), {
@@ -94,6 +103,10 @@ export function SignUpForm({
         path: "/",
       });
       setUser(userData);
+      if (endpoint === "signup") {
+        router.push(`/test`);
+      }
+      router.push(`/home`);
     } catch (err: any) {
       toast.error(err.response?.data?.message || "Network error");
       console.error(err);
