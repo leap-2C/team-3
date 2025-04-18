@@ -39,7 +39,7 @@ const ProfileWidget = (props: { profileData: any; user: any }) => {
 
     try {
       const url = await uploadImageToCloudinary(file);
-      setPatchData((prev) => ({ ...prev, [type]: url }));
+      setPatchData((prev: any) => ({ ...prev, [type]: url }));
       if (profileData && "id" in profileData) {
         await patchUserData({ [type]: url }, profileData.id);
       }
