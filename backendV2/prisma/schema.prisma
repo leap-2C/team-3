@@ -27,12 +27,12 @@ model User {
 
 model Profile {
   id              Int      @id @default(autoincrement())
-  name            String
+  // name            String
   about           String
   avatarImage     String
-  socialMediaURL  String   @unique
+  // socialMediaURL  String   @unique
   backgroundImage String
-  successMessage  String
+  // successMessage  String
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
   user            User?
