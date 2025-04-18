@@ -5,24 +5,28 @@ import InputGroup from "@/components/InputGroup";
 import TextareaGroup from "@/components/TextArea";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useUser } from "@/contexts/UserContext";
+//import Cookies from "js-cookie";
+import { createProfile } from "@/lib/api";
 
 export type ProfileFormData = {
   username: string;
-  firstName: string;
-  lastName: string;
+  firstname: string;
+  lastname: string;
   about: string;
+  avatarImage: string | null;
+  backgroundImage: string | null;
+};
+
+type ImageState = {
+  file: File | null;
+  preview: string | null;
 };
 
 interface StepTwoProps {
-  inputValue: {
-    url: string;
-    username: string;
-    firstName: string;
-    lastName: string;
-    about: string;
-  };
-  setInputValue: any;
+  inputValue: ProfileFormData;
+  setInputValue: React.Dispatch<React.SetStateAction<ProfileFormData>>;
   stepNext: () => void;
 }
 
@@ -40,43 +44,99 @@ const StepTwo: React.FC<StepTwoProps> = ({
   } = useForm<ProfileFormData>({
     defaultValues: {
       username: inputValue.username,
-      firstName: inputValue.firstName,
-      lastName: inputValue.lastName,
-      about: inputValue.about,
+      firstname: '',
+      lastname: '',
+      about: '',
     },
   });
 
-  const about = watch("about");
-
-  const onSubmit = (data: ProfileFormData) => {
-    setInputValue((prev: StepTwoProps["inputValue"]) => ({
-      ...prev,
+  const { user, isLoading } = useUser();
+  const [images, setImages] = useState<{
+    cover: ImageState;
+    profile: ImageState;
+  }>({
+    cover: { file: null, preview: null },
+    profile: { file: null, preview: null },
+  });
+  
+  // const onSubmit = async (data: ProfileFormData) => {
+  //   const avatarImageUrl = images.profile.file ? await uploadImage(images.profile.file) : null;
+  //   const backgroundImageUrl = images.cover.file ? await uploadImage(images.cover.file) : null;
+    
+  //   setInputValue((prev: StepTwoProps["inputValue"]) => ({
+  //     ...prev,
+  //     username: data.username,
+  //     firstname: data.firstname,
+  //     lastname: data.lastname,
+  //     about: data.about,
+  //     avatarImage: avatarImageUrl,
+  //     backgroundImage: backgroundImageUrl,
+  //   }));
+    
+  //   stepNext();
+  // };
+  
+  const onSubmit = async (data: ProfileFormData) => {
+    const avatarImageUrl = images.profile.file ? await uploadImage(images.profile.file) : null;
+    const backgroundImageUrl = images.cover.file ? await uploadImage(images.cover.file) : null;
+  
+    const finalProfileData: ProfileFormData = {
       username: data.username,
-      firstName: data.firstName,
-      lastName: data.lastName,
+      firstname: data.firstname,
+      lastname: data.lastname,
       about: data.about,
-    }));
-    stepNext();
-  };
-
-  //api-aas avsan username haruulna
-  useEffect(() => {
-    // test
-    const UserOne = {
-      username: "",
+      avatarImage: avatarImageUrl,
+      backgroundImage: backgroundImageUrl,
     };
+  
+    try {
+      await createProfile(finalProfileData); 
+      stepNext();
+    } catch (error) {
+      console.error("Failed to create profile:", error);
+      alert("Failed to create profile. Please try again.");
+    }
+  };
+  
 
-    reset({
-      username: UserOne.username,
-      firstName: inputValue.firstName,
-      lastName: inputValue.lastName,
-      about: inputValue.about,
+  useEffect(() => {
+    if(user) {
+      console.log("user", user);
+    }
+    
+  },[user, isLoading]);
+  
+  //username haruulna
+  useEffect(() => {
+    if (user) {
+      reset({
+        username: user.username || "",
+        firstname: "",
+        lastname: "",
+        about: "",
+      });
+    }
+  }, [user, reset]);
+
+  useEffect(() => {
+    const subscription = watch((value) => {
+      setInputValue((prev: StepTwoProps["inputValue"]) => ({
+        ...prev,
+        username: value.username || "",
+        firstName: value.firstname || "",
+        lastName: value.lastname || "",
+        about: value.about || "",
+      }));
     });
-  }, [reset]);
-
+  
+    return () => subscription.unsubscribe();
+  }, [watch, setInputValue]);
+  
+  
   // preview harahiin tuld formoos inputiin utguudiig hynaj haruulna
   const watchedValues = watch();
-
+  const about = watch("about");
+  
   // URL copy hiine
   const handleCopyUrl = () => {
     const urlToCopy = `https://buymecoffee.com/${
@@ -91,6 +151,24 @@ const StepTwo: React.FC<StepTwoProps> = ({
       .catch((err) => {
         console.error("Failed to copy: ", err);
       });
+  };
+
+  const uploadImage = async (file: File) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "updata");
+  
+    try {
+      const res = await fetch(`https://api.cloudinary.com/v1_1/dvswnpwbg/image/upload`, {
+        method: "POST",
+        body: formData,
+      });
+      const data = await res.json();
+      return data.secure_url;
+    } catch (error) {
+      console.error("Image upload failed:", error);
+      return null;
+    }
   };
 
   return (
@@ -122,7 +200,7 @@ const StepTwo: React.FC<StepTwoProps> = ({
               className="absolute stroke-[#00FF7B] right-4 top-5"
             />
             <InputGroup
-              id="firstName"
+              id="firstname"
               label="First Name"
               placeholder="Your first name"
               className="col-span-3"
@@ -138,7 +216,7 @@ const StepTwo: React.FC<StepTwoProps> = ({
             />
 
             <InputGroup
-              id="lastName"
+              id="lastname"
               label="Last Name"
               placeholder="Your last name"
               className="col-span-3"
@@ -172,35 +250,82 @@ const StepTwo: React.FC<StepTwoProps> = ({
 
         {/* preview */}
         <div className="relative w-[432px] h-[591px] rounded-4xl overflow-hidden hidden lg:block">
+          {/* background cover */}
           <div
             className="h-1/2 box-border group relative bg-slate-400 bg-cover bg-center"
             style={{
-              backgroundImage: `url(https://shorturl.at/reOZ8)`,
+              backgroundImage: `url(${images.cover.preview || "https://shorturl.at/reOZ8"})`
             }}
+            
           >
-            <div className="absolute opacity-0 left-4 top-6 px-5 py-2 bg-[var(--foreground)]/40 rounded-full  group-hover:opacity-100 transition-all cursor-pointer">
-              <p className="text-xs text-[var(--background)] flex flex-row items-center gap-2">
-                <ImageUp width={14} />
-                Upload image
-              </p>
+            <div className="absolute opacity-0 bg-[var(--foreground)]/40 group-hover:opacity-100 transition-all cursor-pointer">
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => {
+                  if (e.target.files && e.target.files.length > 0) {
+                    const file = e.target.files[0];
+                    setImages(prev => ({
+                      ...prev,
+                      cover: {
+                        file: file,
+                        preview: URL.createObjectURL(file),
+                      }
+                    }));
+                  }
+                }}
+                className="hidden"
+                id="cover-upload"
+              />
+              <label htmlFor="cover-upload" className="absolute opacity-0 left-4 top-5 px-5 py-2 bg-[var(--foreground)]/40 rounded-full  group-hover:opacity-100 transition-all cursor-pointer">
+                <p className="text-xs text-[var(--background)] flex flex-row items-center gap-2">
+                  <ImageUp width={14} />
+                  Upload image
+                </p>
+              </label>
             </div>
-            <div className="absolute bottom-[23px] right-[21px] bg-white hover:bg-[#f5f5f5] py-2 px-5 rounded-full text-sm font-bold text-black flex items-center justify-center cursor-pointer">
+            <div className="absolute bottom-[23px] right-[21px] bg-white w-[83px] h-[33px] rounded-full text-black flex items-center justify-center cursor">
               Follow
             </div>
           </div>
+
+          {/* profile photo */}
           <div
             className="absolute top-[40%] left-[34px] w-[111px] h-[111px] rounded-2xl overflow-hidden group aspect-square bg-slate-500 bg-cover bg-center"
             style={{
-              backgroundImage: `url(https://shorturl.at/Qy5e9)`,
+              backgroundImage: `url(${images.profile.preview || "https://shorturl.at/Qy5e9"})`
             }}
           >
-            <div className="absolute w-full h-full opacity-0 flex justify-center items-center  bg-[var(--foreground)]/40 group-hover:opacity-100 transition-all cursor-pointer">
+            <label
+              htmlFor="profile-upload"
+              className="absolute w-full h-full opacity-0 flex justify-center items-center bg-[var(--foreground)]/40 group-hover:opacity-100 transition-all cursor-pointer"
+            >
               <ImageUp width={20} className="stroke-[var(--background)]" />
-            </div>
+            </label>
+
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => {
+                if (e.target.files && e.target.files.length > 0) {
+                  const file = e.target.files[0];
+                  setImages(prev => ({
+                    ...prev,
+                    profile: {
+                      file: file,
+                      preview: URL.createObjectURL(file),
+                    }
+                  }));
+                }
+              }}
+              className="hidden"
+              id="profile-upload"
+            />
           </div>
+
           <div className="h-1/2 bg-white box-border p-8 flex flex-col gap-4 ">
             <div className="font-extrabold text-black text-3xl mt-8">
-              {watchedValues.firstName || "Your Name"}
+              {watchedValues.firstname || "Your Name"}
             </div>
             <div className="text-black/60 -mt-4 text-sm">
               @{watchedValues.username || "username"}
@@ -229,7 +354,7 @@ const StepTwo: React.FC<StepTwoProps> = ({
                 className="h-5 text-gray-400 p-0 cursor-pointer"
                 onClick={handleCopyUrl}
               />
-              buymecoffee.com/{inputValue.url || "-"}
+              buymecoffee.com/{inputValue.username || "username"}
             </div>
           </div>
         </div>

@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import Cookies from "js-cookie";
 import axios from "axios";
+import { ProfileFormData } from "@/components/StepTwo";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -65,3 +66,30 @@ export const getReceivedDonations = async (id: string) => {
     throw error;
   }
 };
+
+
+export async function createProfile(userId: number, data: ProfileFormData) {
+  try {
+    const res = await fetch(`${API_URL}/api/profile/${userId}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!res.ok) {
+      throw new Error('Failed to create profile');
+    }
+
+    return res.json();
+  } catch (error) {
+    console.error('Failed to create profile:', error);
+    throw error;
+  }
+}
+
+
+
+
+
