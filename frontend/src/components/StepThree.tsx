@@ -19,6 +19,7 @@ import {
 import Visa from "@/assets/Visa";
 import { Cpu, Wifi } from "lucide-react";
 import { HoverBorderGradient } from "@/components/ui/hover-border-gradient";
+import InputGroupThree from "./InputGroupThree";
 
 type CountryOption = {
   label: string;
@@ -115,7 +116,7 @@ const StepThree: React.FC<StepThreeProps> = ({
             </div>
 
             <div className="w-full flex gap-3">
-              <InputGroup
+              <InputGroupThree
                 id="firstName"
                 label="First Name"
                 placeholder="Your first name"
@@ -127,7 +128,7 @@ const StepThree: React.FC<StepThreeProps> = ({
                 }}
                 error={errors.firstName?.message}
               />
-              <InputGroup
+              <InputGroupThree
                 id="lastName"
                 label="Last Name"
                 placeholder="Your last name"

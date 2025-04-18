@@ -1,6 +1,6 @@
 "use client";
 
-import SignUpForm from "@/components/RegisterForm";
+import { SignUpForm } from "@/components/RegisterForm";
 import { Button } from "@/components/ui/button";
 import {
   Carousel,
@@ -9,7 +9,8 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import Logo from "@/assets/logo.png";
+import { Card, CardContent } from "@/components/ui/card";
+import { Suspense } from "react";
 
 const SignIn = () => {
   return (
@@ -32,13 +33,13 @@ const SignIn = () => {
           </Carousel>
         </div>
         <div className="flex flex-col gap-4 p-6 md:p-10">
-          <div className="w-full flex justify-center items-center mt-20 -mb-10">
-            <img src={Logo.src} width={120} />
-          </div>
+          <div></div>
           <div className="flex justify-center gap-2 md:justify-start"></div>
           <div className="flex flex-1 items-center justify-center">
             <div className="w-full max-w-md">
-              <SignUpForm />
+              <Suspense fallback={<div>Loading...</div>}>
+                <SignUpForm />
+              </Suspense>
             </div>
           </div>
         </div>

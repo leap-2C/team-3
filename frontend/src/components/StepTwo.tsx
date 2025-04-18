@@ -2,7 +2,7 @@
 
 import { CircleCheck, ImageUp, Link2, User2 } from "lucide-react";
 import InputGroup from "@/components/InputGroup";
-import TextareaGroup from "@/components/TextArea";
+import TextareaGroup from "@/components/TextAreaProfile";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
@@ -25,8 +25,8 @@ type ImageState = {
 };
 
 interface StepTwoProps {
-  inputValue: ProfileFormData;
-  setInputValue: React.Dispatch<React.SetStateAction<ProfileFormData>>;
+  inputValue: any;
+  setInputValue: any;
   stepNext: () => void;
 }
 
