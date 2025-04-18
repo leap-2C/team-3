@@ -12,6 +12,7 @@ import ChangeCover from './changeCover'
 import { Avatar, AvatarImage } from "@/components/ui/avatar"
 import { Skeleton } from '@/components/ui/skeleton'
 import ChangeAvatar from './changeAvatar'
+import Image from 'next/image'
 type Profile = {
   name: string;
   socialMediaURL: string;
@@ -19,13 +20,14 @@ type Profile = {
   backgroundImage: string;
   avatarImage: string;
 };
-const DonationProfile = ({ userId }: { userId: number }) => {
-  const profileId = 1
+const DonationProfile = ({ userId}: { userId: number}) => {
   const [profileData, setProfileData] = useState<Profile | null>(null)
   const fetchProfile = async () => {
     try {
       const { data } = await axios.get(`http://localhost:8000/api/profile/current-user/${userId}`)
       setProfileData(data)
+     
+      
     } catch (error) {
       toast.error("Failed to load profile")
     }
@@ -41,7 +43,7 @@ const DonationProfile = ({ userId }: { userId: number }) => {
   }
   const handleCoverUpload = async (url: string) => {
     try {
-      await axios.patch(`http://localhost:8000/api/profile/${profileId}`, {
+      await axios.patch(`http://localhost:8000/api/profile/${profileData.id}`, {
         backgroundImage: url
       })
       setProfileData(prev => prev ? { ...prev, backgroundImage: url } : prev)
@@ -53,7 +55,7 @@ const DonationProfile = ({ userId }: { userId: number }) => {
   }
   const handleAvatarUpload = async (url: string) => {
     try {
-      await axios.patch(`http://localhost:8000/api/profile/${profileId}`, {
+      await axios.patch(`http://localhost:8000/api/profile/${profileData.id}`, {
         avatarImage: url
       })
       setProfileData(prev => prev ? { ...prev, avatarImage: url } : prev)
@@ -109,13 +111,17 @@ const DonationProfile = ({ userId }: { userId: number }) => {
                   <Copy className='text-white' />
                 </Button>
                 <EditProfile
-                  onProfileUpdated={(newData) => {
-                    setProfileData(prev => ({
-                      ...prev!,
-                      ...newData,
-                    }))
-                  }}
-                />
+  userId={userId}
+
+  onProfileUpdated={(newData) => {
+    setProfileData(prev => ({
+      ...prev!,
+      ...newData,
+    }));
+  }}
+/>
+
+
               </div>
             </div>
             <div className='w-full flex flex-col'>

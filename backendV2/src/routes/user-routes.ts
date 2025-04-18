@@ -13,4 +13,6 @@ userRoute.get("/view/:username", getUsername);
 userRoute.get("/current-user/:id", getUser);
 userRoute.get("/explore", getUsers);
 userRoute.post("/:userId",authenticateToken, postUser);
-userRoute.patch("/:profileId",authenticateToken,checkProfileEdit, putUser);
+userRoute.patch("/:profileId",
+    // authenticateToken,checkProfileEdit,
+     putUser);
