@@ -2,6 +2,7 @@
 
 import Footer from "@/components/Footer";
 import LayoutComp from "@/components/LayoutComp";
+import { UserProvider } from "@/contexts/UserContext";
 
 export default function HomeLayout({
   children,
@@ -10,8 +11,10 @@ export default function HomeLayout({
 }) {
   return (
     <LayoutComp>
-      {children}
-      <Footer />
+      <UserProvider>
+        {children}
+        <Footer />
+      </UserProvider>
     </LayoutComp>
   );
 }

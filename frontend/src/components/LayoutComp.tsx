@@ -1,6 +1,7 @@
 import { ToastContainer } from "react-toastify";
 import { Manrope } from "next/font/google";
 import "@/app/globals.css";
+import { UserProvider } from "@/contexts/UserContext";
 
 const manRope = Manrope({
   subsets: ["latin"],
@@ -15,7 +16,7 @@ export default function LayoutComp({
 }) {
   return (
     <div className={manRope.variable}>
-      {children}
+      <UserProvider>{children}</UserProvider>
       <ToastContainer />
     </div>
   );

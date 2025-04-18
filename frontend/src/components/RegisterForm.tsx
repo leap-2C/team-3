@@ -94,7 +94,6 @@ export function SignUpForm({
         path: "/",
       });
       setUser(userData);
-      router.push("/home");
     } catch (err: any) {
       toast.error(err.response?.data?.message || "Network error");
       console.error(err);

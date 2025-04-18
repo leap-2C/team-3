@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import EditCreditCard from "./EditCreditCard";
 import {
   Select,
@@ -11,20 +11,52 @@ import {
 import Visa from "@/assets/Visa";
 import { Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { getBalance, getBankCardInfo } from "@/lib/api";
+import { formatNumber } from "@/utils/CurrencyFormatter";
 
-const FinanceWidget = () => {
+const FinanceWidget = (props: any) => {
+  const { user } = props;
   const [hideInfo, setHideInfo] = useState(false);
+  interface BankInfo {
+    firstName: string;
+    cardNumber: string;
+    expiryDate: string;
+  }
+
+  const [bankInfo, setBankInfo] = useState<BankInfo | null>(null);
+  interface Balance {
+    totalAmount: number;
+  }
+
+  const [balance, setBalance] = useState<Balance | null>(null);
 
   const handleInfoHide = () => {
     setHideInfo((prev) => !prev);
   };
+
+  useEffect(() => {
+    const getUser = async () => {
+      try {
+        if (user && user.id) {
+          const res = await getBankCardInfo(user.id);
+          setBankInfo(res?.data?.[0]);
+          const bal = await getBalance(user.id);
+          setBalance(bal);
+        }
+      } catch (err) {
+        console.error(err);
+        setBankInfo(null);
+      }
+    };
+    getUser();
+  }, [user]);
 
   return (
     <div className="w-2/6 h-[22rem] bg-[#0A0B0C] border border-[#202325] rounded-2xl overflow-hidden">
       <div className="w-full h-3/7 bg-[#0363FB] p-5">
         <div className="w-full h-3/4 flex justify-between items-start">
           <p className="text-xl text-[var(--background)] font-bold">
-            {hideInfo ? ` *****` : `Jameson Cole`}
+            {hideInfo ? ` *****` : bankInfo?.firstName || "-"}
           </p>
           {/* <EditCreditCard /> */}
           <Button onClick={handleInfoHide} className="dark z-40">
@@ -35,11 +67,11 @@ const FinanceWidget = () => {
           <div className="flex flex-row items-center gap-4">
             <p className="text-base text-[var(--background)]">
               {" "}
-              {hideInfo ? ` ******` : `****4324843`}
+              {hideInfo ? ` ******` : bankInfo?.cardNumber || "-"}
             </p>
             <p className="text-base text-[var(--background)]">
               {" "}
-              {hideInfo ? ` **/**` : `12/24`}
+              {hideInfo ? ` **/**` : bankInfo?.expiryDate || "-"}
             </p>
           </div>
           <Visa />
@@ -63,7 +95,7 @@ const FinanceWidget = () => {
         </Select>
       </div>
       <p className="text-4xl text-[var(--background)] font-extrabold px-5">
-        {hideInfo ? ` ***.**` : `$162,745.00`}
+        {hideInfo ? ` ***.**` : `$${formatNumber(balance?.totalAmount)}`}
       </p>
       <div className="px-6 mt-5 flex flex-col gap-2">
         <p className="text-xs text-[var(--background)]/70 font-light">
