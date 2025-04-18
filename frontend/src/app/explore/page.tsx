@@ -1,8 +1,10 @@
 "use client";
-import ProfileCard from "@/components/profileCard";
+import { ProfileCard } from "@/components/profileCard";
 import { PlaceholdersAndVanishInput } from "@/components/ui/placeholder-and-vanish-input";
-
+import { useState, useEffect } from "react";
+import axios from "axios";
 const Explore = () => {
+  const API = process.env.NEXT_PUBLIC_API_URL;
   const placeholders = [
     "Search creators you'd love to support...",
     "Find your favorite creators to cheer!",
@@ -12,13 +14,41 @@ const Explore = () => {
     "Search by username, skill, or passion",
     "Tip your fav creator—start typing!",
   ];
+  const [searchQuery, setSearchQuery] = useState("");
+  interface User {
+    id: string;
+    socialMediaURL: string;
+    about: string;
+    name: string;
+    avatarImage: string;
+    backgroundImage: string;
+    // Add other properties if needed
+  }
+
+  const [users, setUsers] = useState<User[]>([]);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
     console.log(e.target.value);
   };
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("submitted");
   };
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await axios.get(`${API}/api/profile/explore`);
+
+        console.log("Fetched Users:", response.data);
+        setUsers(response.data);
+      } catch (error) {
+        console.error("Error fetching users:", error);
+      }
+    };
+
+    const debounceTimeout = setTimeout(fetchUsers, 300); // Debounce API calls
+    return () => clearTimeout(debounceTimeout);
+  }, [searchQuery, API]);
   return (
     <>
       <div className="w-full  bg-[#0b0d0e] px-[10%] min-h-screen ">
@@ -34,45 +64,22 @@ const Explore = () => {
             />
           </div>
         </div>
-        <div className="mt-14 w-full grid grid-cols-4  gap-10">
-          <ProfileCard />
-          <ProfileCard />
-          <ProfileCard />
-          <ProfileCard />
-          <ProfileCard />
-          <ProfileCard />
-          <ProfileCard />
-          <ProfileCard />
-          <ProfileCard />
-          <ProfileCard />
-          <ProfileCard />
-          <ProfileCard />
-          <ProfileCard />
-          <ProfileCard />
-          <ProfileCard />
-          <ProfileCard />
-          <ProfileCard />
-          <ProfileCard />
-          <ProfileCard />
-          <ProfileCard />
-          <ProfileCard />
-          <ProfileCard />
-          <ProfileCard />
-          <ProfileCard />
-          <ProfileCard />
-          <ProfileCard />
-          <ProfileCard />
+        <div className="mt-14 w-full grid grid-cols-3 2xl:grid-cols-4 gap-10">
+          {users.map((user) => (
+            <ProfileCard
+              key={user.id}
+              socialMediaURL={user.socialMediaURL}
+              about={user.about}
+              name={user.name}
+              id={user.id}
+              avatarImage={user.avatarImage}
+              backgroundImage={user.backgroundImage}
+            />
+          ))}
         </div>
-        <div className="mt-6 w-full h-96 bg-blue-300"></div>
       </div>
     </>
   );
 };
 
 export default Explore;
-{
-  /* <input
-              className="placeholder-white placeholder-opacity-50 w-full focus:placeholder-opacity-0 text-blue-300 h-[312px] focus:outline-none"
-              placeholder="Search"
-            /> */
-}

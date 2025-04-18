@@ -7,6 +7,7 @@ const nextConfig: NextConfig = {
     NEXT_PUBLIC_CLOUDINARY_NAME: process.env.CLOUDINARY_NAME,
     NEXT_PUBLIC_UPLOAD_PRESET: process.env.UPLOAD_PRESET,
   },
+  images: { domains: ["res.cloudinary.com"] },
 };
 
 export default nextConfig;
