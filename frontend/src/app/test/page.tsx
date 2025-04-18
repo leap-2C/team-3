@@ -7,7 +7,7 @@ import { ChevronLeft } from "lucide-react";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 
-type FormData = {
+type CustomFormData = {
   url: string;
   username: string;
   firstName: string;
@@ -21,7 +21,7 @@ type FormData = {
 
 const Profile = () => {
   const [stepState, setStepState] = useState(0);
-  const [inputValue, setInputValue] = useState<FormData>({
+  const [inputValue, setInputValue] = useState<CustomFormData>({
     url: "",
     username: "",
     firstName: "",

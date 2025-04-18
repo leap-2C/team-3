@@ -1,16 +1,16 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { UseFormRegister, RegisterOptions } from "react-hook-form";
-import { ProfileFormData } from "@/components/StepTwo";
+import { bankCardData } from "@/components/StepThree";
 import { ReactNode } from "react";
 
 interface InputGroupProps {
-  id: keyof ProfileFormData;
+  id: keyof bankCardData;
   label: string;
   placeholder: string;
   className?: string;
-  register: any;
-  registerOptions?: RegisterOptions<ProfileFormData, keyof ProfileFormData>;
+  register: UseFormRegister<bankCardData>;
+  registerOptions?: RegisterOptions<bankCardData, keyof bankCardData>;
   error?: string;
   icon?:ReactNode;
 }

@@ -1,15 +1,21 @@
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { UseFormRegister, RegisterOptions } from "react-hook-form";
-import { bankCardData } from "@/components/StepThree";
+import { ProfileFormData } from "@/components/StepTwo";
 
 interface TextareaGroupProps {
-  id: keyof bankCardData;
+  id:
+    | "username"
+    | "firstname"
+    | "lastname"
+    | "about"
+    | "avatarImage"
+    | "backgroundImage";
   label: string;
   placeholder: string;
   className?: string;
-  register: UseFormRegister<bankCardData>;
-  registerOptions?: RegisterOptions<bankCardData, keyof bankCardData>;
+  register: UseFormRegister<ProfileFormData>;
+  registerOptions?: RegisterOptions<ProfileFormData, keyof ProfileFormData>;
   error?: string;
 }
 
@@ -32,7 +38,13 @@ export default function TextareaGroup({
           id={id as string}
           placeholder={placeholder}
           {...register(
-            id as "cardNumber" | "firstName" | "lastName" | "month" | "year",
+            id as
+              | "username"
+              | "firstname"
+              | "lastname"
+              | "about"
+              | "avatarImage"
+              | "backgroundImage",
             registerOptions
           )}
           className="p-0 resize-none bg-transparent border-none text-sm text-white focus-visible:ring-0 focus-visible:ring-offset-0"

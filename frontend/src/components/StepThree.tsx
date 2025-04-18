@@ -19,13 +19,14 @@ import {
 import Visa from "@/assets/Visa";
 import { Cpu, Wifi } from "lucide-react";
 import { HoverBorderGradient } from "@/components/ui/hover-border-gradient";
+import InputGroupThree from "./InputGroupThree";
 
 type CountryOption = {
   label: string;
   value: string;
 };
 
-export type ProfileFormData = {
+export type bankCardData = {
   cardNumber: string;
   firstName: string;
   lastName: string;
@@ -66,7 +67,7 @@ const StepThree: React.FC<StepThreeProps> = ({
     formState: { errors },
     setValue,
     watch,
-  } = useForm<ProfileFormData>({
+  } = useForm<bankCardData>({
     defaultValues: {
       cardNumber: inputValue.cardNumber || "",
       firstName: inputValue.firstName || "",
@@ -85,8 +86,8 @@ const StepThree: React.FC<StepThreeProps> = ({
       }));
   }, []);
 
-  const onSubmit = (data: ProfileFormData) => {
-    setInputValue((prev: ProfileFormData) => ({ ...prev, ...data }));
+  const onSubmit = (data: bankCardData) => {
+    setInputValue((prev: bankCardData) => ({ ...prev, ...data }));
     stepNext();
   };
 
@@ -115,7 +116,7 @@ const StepThree: React.FC<StepThreeProps> = ({
             </div>
 
             <div className="w-full flex gap-3">
-              <InputGroup
+              <InputGroupThree
                 id="firstName"
                 label="First Name"
                 placeholder="Your first name"
@@ -127,7 +128,7 @@ const StepThree: React.FC<StepThreeProps> = ({
                 }}
                 error={errors.firstName?.message}
               />
-              <InputGroup
+              <InputGroupThree
                 id="lastName"
                 label="Last Name"
                 placeholder="Your last name"
