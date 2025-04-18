@@ -79,22 +79,10 @@ export function SignUpForm({
 
     try {
       const endpoint = activeTab === "signup" ? "signup" : "signin";
-      const timeout = new Promise((_, reject) =>
-        setTimeout(() => reject(new Error("Request timed out")), 5000)
-      );
-      const request = axios.post(`${API_URL}/api/auth/${endpoint}`, data, {
+      const { confirmPassword, ...payload } = data;
+      const res = await axios.post(`${API_URL}/api/auth/${endpoint}`, data, {
         withCredentials: true,
       });
-      const { confirmPassword, ...payload } = data;
-      console.log(payload);
-      const res = (await Promise.race([request, timeout])) as {
-        data: {
-          data: {
-            accessToken: string;
-            user: any;
-          };
-        };
-      };
       const token = res.data.data.accessToken;
       const userData = res.data.data.user;
       Cookies.set("token", token, { expires: 999, path: "/" });
