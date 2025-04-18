@@ -6,9 +6,9 @@ import { uploadImageToCloudinary } from "@/utils/Cloudinary";
 import { useState } from "react";
 import EditProfileDialog from "./EditProfileDialog";
 
-const ProfileWidget = (props: { profileData: any }) => {
-  const { profileData } = props;
-  const [patchData, setPatchData] = useState({});
+const ProfileWidget = (props: { profileData: any; user: any }) => {
+  const { profileData, user } = props;
+  const [patchData, setPatchData] = useState<any>({});
 
   const handleCopy = async () => {
     try {
@@ -39,7 +39,7 @@ const ProfileWidget = (props: { profileData: any }) => {
 
     try {
       const url = await uploadImageToCloudinary(file);
-      setPatchData((prev) => ({ ...prev, [type]: url }));
+      setPatchData((prev: any) => ({ ...prev, [type]: url }));
       if (profileData && "id" in profileData) {
         await patchUserData({ [type]: url }, profileData.id);
       }
@@ -105,7 +105,7 @@ const ProfileWidget = (props: { profileData: any }) => {
           </div>
           <div className="flex flex-col">
             <p className="text-xl font-semibold text-[var(--background)]">
-              {profileData?.name}
+              {user?.username}
             </p>
             <p className="text-xs font-light text-[var(--background)]/40 -mt-[2px]">
               @{profileData?.name}

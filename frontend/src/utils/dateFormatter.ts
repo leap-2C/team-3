@@ -1,24 +1,16 @@
-export const formatDate = (isoDate: string): string => {
-  const date = new Date(isoDate);
-  const now = new Date();
-  const diff = Math.floor((now.getTime() - date.getTime()) / 1000);
+import { formatDistanceToNow } from "date-fns";
 
-  const units = [
-    { label: "year", short: "y", seconds: 31536000 },
-    { label: "month", short: "mo", seconds: 2592000 },
-    { label: "week", short: "w", seconds: 604800 },
-    { label: "day", short: "d", seconds: 86400 },
-    { label: "hour", short: "h", seconds: 3600 },
-    { label: "minute", short: "m", seconds: 60 },
-    { label: "second", short: "s", seconds: 1 },
-  ];
+export function formatDate(dateString: string): string {
+  const date = new Date(dateString);
+  const relativeTime = formatDistanceToNow(date, { addSuffix: true });
 
-  for (const unit of units) {
-    const value = Math.floor(diff / unit.seconds);
-    if (value > 0) {
-      return `${value} ${unit.label}${value > 1 ? "s" : ""} ago`;
-    }
-  }
-
-  return "just now";
-};
+  return relativeTime
+    .replace("about a minute ago", "1m ago")
+    .replace("about a month ago", "1mo ago")
+    .replace("about a year ago", "1y ago")
+    .replace(/(\d+) minutes ago/g, "$1m ago")
+    .replace(/(\d+) hours ago/g, "$1h ago")
+    .replace(/(\d+) days ago/g, "$1d ago")
+    .replace(/(\d+) months ago/g, "$1mo ago")
+    .replace(/(\d+) years ago/g, "$1y ago");
+}

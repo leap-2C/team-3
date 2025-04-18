@@ -6,12 +6,12 @@ import { ProfileFormData } from "@/components/StepTwo";
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 // FETCH PROFILE DATA BY NAME
-export async function fetchCurrentUser() {
+export async function fetchCurrentUser(id: string) {
   try {
     const token = Cookies.get("token");
     if (!token) return null;
 
-    const res = await axios.get(`${API_URL}/api/profile/view/xop`, {
+    const res = await axios.get(`${API_URL}/api/profile/current-user/${id}`, {
       headers: { Authorization: `Bearer ${token}` },
       withCredentials: true,
     });
@@ -46,7 +46,6 @@ export const patchUserData = async (data: any, id: string) => {
 };
 
 export const getReceivedDonations = async (id: string) => {
-  console.log(id, `HELLO2`);
   try {
     const token = Cookies.get("token");
     const response = await fetch(`${API_URL}/api/donation/received/${id}`, {
@@ -66,7 +65,6 @@ export const getReceivedDonations = async (id: string) => {
     throw error;
   }
 };
-
 
 export async function createProfile(userId: number, data: ProfileFormData) {
   try {
@@ -90,6 +88,47 @@ export async function createProfile(userId: number, data: ProfileFormData) {
 }
 
 
+export const getBankCardInfo = async (id: string) => {
+  try {
+    const token = Cookies.get("token");
+    const response = await fetch(`${API_URL}/api/bankcard/${id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token && { Authorization: `Bearer ${token}` }),
+      },
+    });
+    if (!response.ok) {
+      throw new Error("Failed to patch user data");
+    }
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error("patchUserData error:", error);
+    throw error;
+  }
+};
 
-
-
+export const getBalance = async (id: string) => {
+  try {
+    const token = Cookies.get("token");
+    const response = await fetch(
+      `${API_URL}/api/donation/total-earnings/${id}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          ...(token && { Authorization: `Bearer ${token}` }),
+        },
+      }
+    );
+    if (!response.ok) {
+      throw new Error("Failed to patch user data");
+    }
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error("patchUserData error:", error);
+    throw error;
+  }
+};
