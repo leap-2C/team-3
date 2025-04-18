@@ -13,7 +13,7 @@ const ChangeCover = ({ onCoverUploaded }: Props) => {
     if (!file) return
     const formData = new FormData()
     formData.append('file', file)
-    formData.append('upload_preset', 'updata')
+    formData.append('upload_preset', 'Covaar')
     try {
       const res = await axios.post(
         `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,

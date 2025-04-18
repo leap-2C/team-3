@@ -5,7 +5,8 @@ import { Input } from '@/components/ui/input'
 import axios from 'axios'
 
 const ChangeAvatar = ({ onAvatarUploaded }: { onAvatarUploaded: (url: string) => void }) => {
-  const CLOUD_NAME = process.env.NEXT_PUBLIC_CLOUDINARY_NAME
+  const CLOUD_NAME = process.env.NEXT_PUBLIC_CLOUDINARY_NAME as string
+const PRESET_NAME = process.env.NEXT_PUBLIC_CLOUDINARY_PRESET as string
 
   const handleInput = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
@@ -13,7 +14,7 @@ const ChangeAvatar = ({ onAvatarUploaded }: { onAvatarUploaded: (url: string) =>
 
     const formData = new FormData()
     formData.append('file', file)
-    formData.append('upload_preset', 'updata')
+    formData.append('upload_preset', PRESET_NAME)
 
     try {
       const res = await axios.post(
