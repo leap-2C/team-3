@@ -79,8 +79,8 @@ export function SignUpForm({
 
     try {
       const endpoint = activeTab === "signup" ? "signup" : "signin";
-      const { confirmPassword, ...payload } = data;
-      const res = await axios.post(`${API_URL}/api/auth/${endpoint}`, data, {
+      const { confirmPassword, ...rest } = data;
+      const res = await axios.post(`${API_URL}/api/auth/${endpoint}`, rest, {
         withCredentials: true,
       });
       const token = res.data.data.accessToken;
@@ -92,9 +92,10 @@ export function SignUpForm({
       });
       setUser(userData);
       if (endpoint === "signup") {
-        router.push(`/test`);
+        router.push(`/otp`);
+      } else {
+        router.push(`/home`);
       }
-      router.push(`/home`);
     } catch (err: any) {
       toast.error(err.response?.data?.message || "Network error");
       console.error(err);

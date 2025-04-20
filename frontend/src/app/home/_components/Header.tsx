@@ -3,16 +3,26 @@ import { useRouter } from "next/navigation";
 import Logo from "@/assets/logo.png";
 import Cookies from "js-cookie";
 import Link from "next/link";
+import AuthDialog from "@/components/authDialog";
 
 const Header = () => {
   const router = useRouter();
+  const token = Cookies.get("token");
 
   const handleDashboard = () => {
-    const token = Cookies.get("token");
     if (!token) {
       router.push(`/auth/sign-in`);
     } else {
       router.push(`/dashboard`);
+    }
+  };
+
+  const handleLogOut = () => {
+    if (token) {
+      Cookies.remove("token");
+      window.location.reload();
+    } else {
+      console.log(`Error`);
     }
   };
 
@@ -44,17 +54,30 @@ const Header = () => {
         </ul>
       </div>
       <div className="flex items-center gap-4">
-        <Link href={`/auth/sign-in?type=signin`}>
-          <Button className="dark p-6 rounded-xl font-bold hover:scale-105">
-            Sign in
+        {token ? (
+          <Button
+            className="dark p-6 rounded-xl font-bold hover:scale-105"
+            onClick={handleLogOut}
+          >
+            Logout
           </Button>
-        </Link>
-        <Button
-          className="p-6 rounded-xl font-bold hover:scale-105"
-          onClick={handleDashboard}
-        >
-          Dashboard
-        </Button>
+        ) : (
+          <Link href={`/auth/sign-in?type=signin`}>
+            <Button className="dark p-6 rounded-xl font-bold hover:scale-105">
+              Sign in
+            </Button>
+          </Link>
+        )}
+        {token ? (
+          <Button
+            className="p-6 rounded-xl font-bold hover:scale-105"
+            onClick={handleDashboard}
+          >
+            Dashboard
+          </Button>
+        ) : (
+          <AuthDialog />
+        )}
       </div>
     </div>
   );
