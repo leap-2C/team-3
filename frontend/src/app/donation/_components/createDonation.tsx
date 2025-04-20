@@ -1,97 +1,103 @@
-"use client"
-import React, { useEffect, useState } from 'react'
-import axios from 'axios'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { Wine } from 'lucide-react'
-import { Input } from '@/components/ui/input'
-import { toast } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
-import { useParams } from 'next/navigation'
-import { useRouter } from 'next/navigation'
+"use client";
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Wine } from 'lucide-react';
+import { Textarea } from "@/components/ui/textarea";
+import { Input } from '@/components/ui/input';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
+import { useUser } from '@/lib/UserContext'
 
-const CreateDonation = ({ userId }: { userId: number;  }) => {
-const params = useParams()
-const receiverId = Number(params?.id);
+const CreateDonation = () => {
+  const { user } = useUser(); 
+  const params = useParams();
+  const receiverId = parseInt(params.id as string, 10);
+  
+  const test = process.env.NEXT_PUBLIC_API_URL;
 
-
-console.log(receiverId);
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
   const [userData, setUserData] = useState<{ name: string; avatarImage: string }>({ name: '', avatarImage: '' });
+
   useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const response = await axios.get(`http://localhost:8000/api/profile/current-user/${userId}`);
-        setUserData(response.data);
-      } catch (error) {
-        console.error("Failed to fetch user data", error);
-      }
+    if (user) {
+      const fetchUserData = async () => {
+        try {
+          const response = await axios.get(`${test}/api/profile/current-user/${user.id}`);
+          setUserData(response.data);
+        } catch (error) {
+          console.error("Failed to fetch user data", error);
+        }
+      };
+      fetchUserData();
     }
-    fetchUserData();
-  }, [userId]);
+  }, [user]);
 
   const [selected, setSelected] = useState<number>(1);
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{ specialMessage: string; socialMediaURL: string }>({
     specialMessage: "",
     socialMediaURL: ""
   });
 
   const handleAmount = (amount: number) => setSelected(amount);
-  const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInput = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
       [name]: value
     }));
-  }
+  };
 
   const route = useRouter();
 
   const support = async () => {
-   
+    if (!user) {
+      toast.error("User not found.");
+      return;
+    }
 
     const send = {
       amount: selected,
       specialMessage: formData.specialMessage,
       socialURLOrBuyMeACoffee: formData.socialMediaURL,
-      donorId: userId,
-      recipientId: receiverId,
-    }
+      donorId: user.id, // Use user.id from context
+      recipientId: receiverId
+    };
 
     try {
-      await axios.post(`http://localhost:8000/api/donation/create-donation`, send);
+      await axios.post(`${test}/api/donation/create-donation`, send);
       toast.success("Donation successful! 🎉");
 
-      // Save the necessary data to localStorage
       const donationData = {
-        name: userData.name,  // User's name
-        avatarImage: userData.avatarImage,  // User's avatar image
-        amount: selected,  // Selected donation amount
-        specialMessage: formData.specialMessage,  // Special message
-        sentDate: new Date().toISOString(),  // Date of donation
+        name: userData.name,
+        avatarImage: userData.avatarImage,
+        amount: selected,
+        specialMessage: formData.specialMessage,
+        sentDate: new Date().toISOString(),
       };
-      
-      localStorage.setItem("donation", JSON.stringify(donationData));
 
-      // Redirect to success page
+      localStorage.setItem("donation", JSON.stringify(donationData));
       route.push(`/success/${receiverId}`);
-      
-      // Reset the form
       setSelected(1);
       setFormData({ specialMessage: "", socialMediaURL: "" });
     } catch (err) {
       toast.error("Failed to donate.");
       console.error(err);
     }
-  }
+  };
 
   const customAmount = (e: React.ChangeEvent<HTMLInputElement>) => {
     const custom = parseFloat(e.target.value);
-    if (!isNaN(custom)) {
+    if (custom > 0) {
       setSelected(custom);
+    } else {
+      toast.error("Please enter a valid amount.");
     }
-  }
+  };
 
   return (
     <Badge className='bg-[#0A0B0C] w-fit h-fit p-[30px] flex flex-col items-start gap-[35px] rounded-[16px] border-2 border-gray-800'>
@@ -125,13 +131,14 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
       </div>
       <div className='flex flex-col gap-[15px] w-full'>
         <p>Special Message</p>
-        <Input
+        <Textarea
           name="specialMessage"
           value={formData.specialMessage}
           onChange={handleInput}
           placeholder="Please write special message from bottom of your heart"
-          className='bg-[#1C1D1F] border border-zinc-700 text-white w-full h-[200px] text-center'
+          className='bg-[#1C1D1F] border border-zinc-700 text-white w-full h-[150px] rounded-[7px] p-[20px]'
         />
+
         <p>Enter your social media URL</p>
         <Input
           name="socialMediaURL"
@@ -145,7 +152,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
         Support {selected} $
       </Button>
     </Badge>
-  )
-}
+  );
+};
 
 export default CreateDonation;
