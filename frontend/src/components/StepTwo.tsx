@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { useUser } from "@/contexts/UserContext";
-//import Cookies from "js-cookie";
 import { createProfile } from "@/lib/api";
 
 export type ProfileFormData = {
@@ -25,8 +24,8 @@ type ImageState = {
 };
 
 interface StepTwoProps {
-  inputValue: any;
-  setInputValue: any;
+  inputValue: ProfileFormData;
+  setInputValue: React.Dispatch<React.SetStateAction<ProfileFormData>>;
   stepNext: () => void;
 }
 
@@ -59,23 +58,6 @@ const StepTwo: React.FC<StepTwoProps> = ({
     profile: { file: null, preview: null },
   });
 
-  // const onSubmit = async (data: ProfileFormData) => {
-  //   const avatarImageUrl = images.profile.file ? await uploadImage(images.profile.file) : null;
-  //   const backgroundImageUrl = images.cover.file ? await uploadImage(images.cover.file) : null;
-
-  //   setInputValue((prev: StepTwoProps["inputValue"]) => ({
-  //     ...prev,
-  //     username: data.username,
-  //     firstname: data.firstname,
-  //     lastname: data.lastname,
-  //     about: data.about,
-  //     avatarImage: avatarImageUrl,
-  //     backgroundImage: backgroundImageUrl,
-  //   }));
-
-  //   stepNext();
-  // };
-
   const onSubmit = async (data: ProfileFormData) => {
     const avatarImageUrl = images.profile.file ? await uploadImage(images.profile.file) : null;
     const backgroundImageUrl = images.cover.file ? await uploadImage(images.cover.file) : null;
@@ -103,6 +85,11 @@ const StepTwo: React.FC<StepTwoProps> = ({
     }
   };
 
+  // useEffect(() => {
+  //   if (inputValue) {
+  //     reset(inputValue);
+  //   }
+  // }, [inputValue, reset]);
 
   useEffect(() => {
     if (user) {
@@ -128,8 +115,8 @@ const StepTwo: React.FC<StepTwoProps> = ({
       setInputValue((prev: StepTwoProps["inputValue"]) => ({
         ...prev,
         username: value.username || "",
-        firstName: value.firstname || "",
-        lastName: value.lastname || "",
+        firstname: value.firstname || "",
+        lastname: value.lastname || "",
         about: value.about || "",
       }));
     });
@@ -167,8 +154,13 @@ const StepTwo: React.FC<StepTwoProps> = ({
         method: "POST",
         body: formData,
       });
+      
+      if (!res.ok) {
+        throw new Error("Failed to upload image");
+      }
       const data = await res.json();
       return data.secure_url;
+
     } catch (error) {
       console.error("Image upload failed:", error);
       return null;
@@ -199,10 +191,12 @@ const StepTwo: React.FC<StepTwoProps> = ({
               error={errors.username?.message}
               icon={<User2 className="w-4 h-4" />}
             />
-            <CircleCheck
-              width={17}
-              className="absolute stroke-[#00FF7B] right-4 top-5"
-            />
+            {watchedValues.username && (
+              <CircleCheck
+                width={17}
+                className="absolute stroke-[#00FF7B] right-4 top-5"
+              />
+            )}
             <InputGroup
               id="firstname"
               label="First Name"

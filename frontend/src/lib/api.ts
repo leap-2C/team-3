@@ -68,24 +68,40 @@ export const getReceivedDonations = async (id: string) => {
 
 export async function createProfile(userId: number, data: ProfileFormData) {
   try {
+    const token = localStorage.getItem("token"); 
+    if (!token) {
+      console.log('Token is missing');
+      return;
+    }
+
     const res = await fetch(`${API_URL}/api/profile/${userId}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        ...(token && { Authorization: `Bearer ${token}` }),
       },
+
+      
       body: JSON.stringify(data),
     });
 
     if (!res.ok) {
-      throw new Error('Failed to create profile');
+      const errorData = await res.json();
+      throw new Error(errorData.message || 'Failed to create profile');
     }
 
     return res.json();
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Failed to create profile:', error);
-    throw error;
+
+    if (error instanceof Error) {
+      throw new Error(`Failed to create profile: ${error.message}`);
+    } else {
+      throw new Error('Failed to create profile: Unknown error');
+    }
   }
 }
+
 
 
 export const getBankCardInfo = async (id: string) => {
