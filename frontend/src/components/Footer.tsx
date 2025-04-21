@@ -1,6 +1,7 @@
 import { Separator } from "@/components/ui/separator";
 import { Github } from "lucide-react";
 import LogoWhite from "@/assets/logo-white.png";
+import Link from "next/link";
 
 const Footer = () => {
   return (
@@ -89,7 +90,9 @@ const Footer = () => {
               © 2025 Team-3 Project.
             </p>
             <div className="w-36 flex justify-end">
-              <Github className="stroke-[#89898A] fill-[#89898A] hover:stroke-white hover:fill-white cursor-pointer" />
+              <Link href="https://github.com/leap-2C/team-3" target="_blank">
+                <Github className="stroke-[#89898A] fill-[#89898A] hover:stroke-white hover:fill-white cursor-pointer" />
+              </Link>
             </div>
           </div>
         </div>

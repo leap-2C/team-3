@@ -101,7 +101,15 @@ export async function createProfile(userId: number, data: ProfileFormData) {
     }
   }
 }
+      throw new Error("Failed to create profile");
+    }
 
+    return res.json();
+  } catch (error) {
+    console.error("Failed to create profile:", error);
+    throw error;
+  }
+}
 
 
 export const getBankCardInfo = async (id: string) => {
@@ -145,6 +153,32 @@ export const getBalance = async (id: string) => {
     return result;
   } catch (error) {
     console.error("patchUserData error:", error);
+    throw error;
+  }
+};
+
+export const OTPCheck = async (email: string, otp: string) => {
+  console.log(`working`);
+  try {
+    const token = Cookies.get("token");
+    const response = await fetch(`${API_URL}/api/auth/verify-email`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token && { Authorization: `Bearer ${token}` }),
+      },
+      body: JSON.stringify({
+        email: email,
+        code: otp,
+      }),
+    });
+    const result = await response.json();
+    if (!response.ok) {
+      throw new Error(result.message || "Failed to verify OTP");
+    }
+    return result;
+  } catch (error) {
+    console.error("OTPCheck error:", error);
     throw error;
   }
 };

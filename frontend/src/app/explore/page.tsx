@@ -3,16 +3,15 @@ import { ProfileCard } from "@/components/profileCard";
 import { PlaceholdersAndVanishInput } from "@/components/ui/placeholder-and-vanish-input";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { ChevronLeft } from "lucide-react";
+import Link from "next/link";
 const Explore = () => {
   const API = process.env.NEXT_PUBLIC_API_URL;
   const placeholders = [
     "Search creators you'd love to support...",
     "Find your favorite creators to cheer!",
-    "Who needs coffee today?",
     "Not coffee? Tea works too! Search away.",
     "Type a name to send support!",
-    "Search by username, skill, or passion",
-    "Tip your fav creator—start typing!",
   ];
   const [searchQuery, setSearchQuery] = useState("");
   interface User {
@@ -51,12 +50,18 @@ const Explore = () => {
   }, [searchQuery, API]);
   return (
     <>
-      <div className="w-full  bg-[#0b0d0e] px-[10%] min-h-screen ">
+      <div className="w-full px-[10%] min-h-screen">
         <div className="pt-20 flex justify-between  dark">
-          <div className="text-white font-extrabold text-2xl">
-            Explore Users
+          <div className="flex flex-col">
+            <p className="text-white font-extrabold text-2xl">Explore Users</p>
+            <Link href={`/home`}>
+              <p className="text-[var(--foreground)]/40 text-sm flex items-center mt-3">
+                <ChevronLeft width={18} />
+                Home
+              </p>
+            </Link>
           </div>
-          <div className="w-[500px]">
+          <div className="w-[450px]">
             <PlaceholdersAndVanishInput
               placeholders={placeholders}
               onChange={handleChange}
