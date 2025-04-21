@@ -1,4 +1,3 @@
-import { redirect } from "next/navigation";
 import Cookies from "js-cookie";
 import axios from "axios";
 import { ProfileFormData } from "@/components/StepTwo";
@@ -67,21 +66,16 @@ export const getReceivedDonations = async (id: string) => {
 };
 
 export async function createProfile(userId: number, data: ProfileFormData) {
+  console.log("Creating profile with data:", data); 
+  
   try {
-    const token = localStorage.getItem("token"); 
-    if (!token) {
-      console.log('Token is missing');
-      return;
-    }
-
+    const token = Cookies.get("token"); 
     const res = await fetch(`${API_URL}/api/profile/${userId}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         ...(token && { Authorization: `Bearer ${token}` }),
       },
-
-      
       body: JSON.stringify(data),
     });
 
@@ -93,16 +87,8 @@ export async function createProfile(userId: number, data: ProfileFormData) {
     return res.json();
   } catch (error: unknown) {
     console.error('Failed to create profile:', error);
-
-    if (error instanceof Error) {
-      throw new Error(`Failed to create profile: ${error.message}`);
-    } else {
-      throw new Error('Failed to create profile: Unknown error');
-    }
   }
 }
-
-
 
 export const getBankCardInfo = async (id: string) => {
   try {

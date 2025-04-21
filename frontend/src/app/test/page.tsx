@@ -7,7 +7,7 @@ import { ChevronLeft } from "lucide-react";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 
-type CustomFormData = {
+export type CustomFormDataType = {
   url: string;
   username: string;
   firstName: string;
@@ -19,9 +19,10 @@ type CustomFormData = {
   country: string;
 };
 
+
 const Profile = () => {
   const [stepState, setStepState] = useState(0);
-  const [inputValue, setInputValue] = useState<CustomFormData>({
+  const [inputValue, setInputValue] = useState<CustomFormDataType>({
     url: "",
     username: "",
     firstName: "",
@@ -32,6 +33,7 @@ const Profile = () => {
     year: "",
     country: "",
   });
+  
 
   useEffect(() => {
     const savedData = localStorage.getItem("formData");
@@ -57,6 +59,7 @@ const Profile = () => {
       JSON.stringify({ ...dataToSave, stepState })
     );
   }, [inputValue, stepState]);
+  
 
   const stepNext = () => {
     if (stepState < 2) setStepState((prev) => prev + 1);
@@ -105,10 +108,11 @@ const Profile = () => {
             )}
             {stepState === 1 && (
               <StepTwo
-                inputValue={inputValue}
-                setInputValue={setInputValue}
-                stepNext={stepNext}
-              />
+              inputValue={inputValue}
+              setInputValue={setInputValue}
+              stepNext={stepNext}
+            />
+            
             )}
             {stepState === 2 && (
               <StepThree
