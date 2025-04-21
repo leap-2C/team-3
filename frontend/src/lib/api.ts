@@ -170,3 +170,34 @@ export const OTPCheck = async (email: string, otp: string) => {
     throw error;
   }
 };
+export const postBankCardInfo = async (cardData: object, userid: string) => {
+  console.log("Posting bank card info...");
+  try {
+    const token = Cookies.get("token");
+
+    const response = await fetch(`${API_URL}/api/bankcard/${userid}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token && { Authorization: `Bearer ${token}` }),
+      },
+      body: JSON.stringify(cardData),
+    });
+
+    console.log("Response status:", response.status);
+
+    const result = await response.json();
+    console.log("Response body:", result);
+
+    if (!response.ok) {
+      const errorMessage = result?.message || `Failed to post bank card info. Status: ${response.status}`;
+      console.error("Error Response:", errorMessage);
+      throw new Error(errorMessage);
+    }
+
+    return result;
+  } catch (error) {
+    console.error("Bank card post error:", error);
+    throw error;
+  }
+};

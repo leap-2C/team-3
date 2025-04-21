@@ -37,7 +37,7 @@ export const createBankCard = async (
         country,
         firstName,
         lastName,
-        expiryDate,
+        expiryDate: expiryDate  || "",
         userId: parseInt(id),
       },
     });
