@@ -68,9 +68,9 @@ export const getReceivedDonations = async (id: string) => {
 
 export async function createProfile(userId: number, data: ProfileFormData) {
   try {
-    const token = localStorage.getItem("token"); 
+    const token = localStorage.getItem("token");
     if (!token) {
-      console.log('Token is missing');
+      console.log("Token is missing");
       return;
     }
 
@@ -80,37 +80,25 @@ export async function createProfile(userId: number, data: ProfileFormData) {
         "Content-Type": "application/json",
         ...(token && { Authorization: `Bearer ${token}` }),
       },
-
-      
       body: JSON.stringify(data),
     });
 
     if (!res.ok) {
       const errorData = await res.json();
-      throw new Error(errorData.message || 'Failed to create profile');
+      throw new Error(errorData.message || "Failed to create profile");
     }
 
     return res.json();
   } catch (error: unknown) {
-    console.error('Failed to create profile:', error);
+    console.error("Failed to create profile:", error);
 
     if (error instanceof Error) {
       throw new Error(`Failed to create profile: ${error.message}`);
     } else {
-      throw new Error('Failed to create profile: Unknown error');
+      throw new Error("Failed to create profile: Unknown error");
     }
   }
 }
-      throw new Error("Failed to create profile");
-    }
-
-    return res.json();
-  } catch (error) {
-    console.error("Failed to create profile:", error);
-    throw error;
-  }
-}
-
 
 export const getBankCardInfo = async (id: string) => {
   try {

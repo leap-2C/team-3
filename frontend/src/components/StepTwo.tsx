@@ -25,7 +25,7 @@ type ImageState = {
 
 interface StepTwoProps {
   inputValue: ProfileFormData;
-  setInputValue: React.Dispatch<React.SetStateAction<ProfileFormData>>;
+  setInputValue: any;
   stepNext: () => void;
 }
 
@@ -43,9 +43,9 @@ const StepTwo: React.FC<StepTwoProps> = ({
   } = useForm<ProfileFormData>({
     defaultValues: {
       username: inputValue.username,
-      firstname: '',
-      lastname: '',
-      about: '',
+      firstname: "",
+      lastname: "",
+      about: "",
     },
   });
 
@@ -59,8 +59,12 @@ const StepTwo: React.FC<StepTwoProps> = ({
   });
 
   const onSubmit = async (data: ProfileFormData) => {
-    const avatarImageUrl = images.profile.file ? await uploadImage(images.profile.file) : null;
-    const backgroundImageUrl = images.cover.file ? await uploadImage(images.cover.file) : null;
+    const avatarImageUrl = images.profile.file
+      ? await uploadImage(images.profile.file)
+      : null;
+    const backgroundImageUrl = images.cover.file
+      ? await uploadImage(images.cover.file)
+      : null;
 
     const finalProfileData: ProfileFormData = {
       username: data.username,
@@ -95,7 +99,6 @@ const StepTwo: React.FC<StepTwoProps> = ({
     if (user) {
       console.log("user", user);
     }
-
   }, [user, isLoading]);
 
   //username haruulna
@@ -124,15 +127,15 @@ const StepTwo: React.FC<StepTwoProps> = ({
     return () => subscription.unsubscribe();
   }, [watch, setInputValue]);
 
-
   // preview harahiin tuld formoos inputiin utguudiig hynaj haruulna
   const watchedValues = watch();
   const about = watch("about");
 
   // URL copy hiine
   const handleCopyUrl = () => {
-    const urlToCopy = `https://buymecoffee.com/${watchedValues.username || "username"
-      }`;
+    const urlToCopy = `https://buymecoffee.com/${
+      watchedValues.username || "username"
+    }`;
 
     navigator.clipboard
       .writeText(urlToCopy)
@@ -150,17 +153,19 @@ const StepTwo: React.FC<StepTwoProps> = ({
     formData.append("upload_preset", "updata");
 
     try {
-      const res = await fetch(`https://api.cloudinary.com/v1_1/dvswnpwbg/image/upload`, {
-        method: "POST",
-        body: formData,
-      });
-      
+      const res = await fetch(
+        `https://api.cloudinary.com/v1_1/dvswnpwbg/image/upload`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
       if (!res.ok) {
         throw new Error("Failed to upload image");
       }
       const data = await res.json();
       return data.secure_url;
-
     } catch (error) {
       console.error("Image upload failed:", error);
       return null;
@@ -252,9 +257,10 @@ const StepTwo: React.FC<StepTwoProps> = ({
           <div
             className="h-1/2 box-border group relative bg-slate-400 bg-cover bg-center"
             style={{
-              backgroundImage: `url(${images.cover.preview || "https://shorturl.at/reOZ8"})`
+              backgroundImage: `url(${
+                images.cover.preview || "https://shorturl.at/reOZ8"
+              })`,
             }}
-
           >
             <div className="absolute opacity-0 bg-[var(--foreground)]/40 group-hover:opacity-100 transition-all cursor-pointer">
               <input
@@ -263,19 +269,22 @@ const StepTwo: React.FC<StepTwoProps> = ({
                 onChange={(e) => {
                   if (e.target.files && e.target.files.length > 0) {
                     const file = e.target.files[0];
-                    setImages(prev => ({
+                    setImages((prev) => ({
                       ...prev,
                       cover: {
                         file: file,
                         preview: URL.createObjectURL(file),
-                      }
+                      },
                     }));
                   }
                 }}
                 className="hidden"
                 id="cover-upload"
               />
-              <label htmlFor="cover-upload" className="absolute opacity-0 left-4 top-5 px-5 py-2 bg-[var(--foreground)]/40 rounded-full  group-hover:opacity-100 transition-all cursor-pointer">
+              <label
+                htmlFor="cover-upload"
+                className="absolute opacity-0 left-4 top-5 px-5 py-2 bg-[var(--foreground)]/40 rounded-full  group-hover:opacity-100 transition-all cursor-pointer"
+              >
                 <p className="text-xs text-[var(--background)] flex flex-row items-center gap-2">
                   <ImageUp width={14} />
                   Upload image
@@ -291,7 +300,9 @@ const StepTwo: React.FC<StepTwoProps> = ({
           <div
             className="absolute top-[40%] left-[34px] w-[111px] h-[111px] rounded-2xl overflow-hidden group aspect-square bg-slate-500 bg-cover bg-center"
             style={{
-              backgroundImage: `url(${images.profile.preview || "https://shorturl.at/Qy5e9"})`
+              backgroundImage: `url(${
+                images.profile.preview || "https://shorturl.at/Qy5e9"
+              })`,
             }}
           >
             <label
@@ -307,12 +318,12 @@ const StepTwo: React.FC<StepTwoProps> = ({
               onChange={(e) => {
                 if (e.target.files && e.target.files.length > 0) {
                   const file = e.target.files[0];
-                  setImages(prev => ({
+                  setImages((prev) => ({
                     ...prev,
                     profile: {
                       file: file,
                       preview: URL.createObjectURL(file),
-                    }
+                    },
                   }));
                 }
               }}

@@ -48,7 +48,7 @@ const OTP = () => {
         router.push("/test");
         toast.success("Successfully verified");
       } else {
-        toast.error("error occured");
+        toast.error("error occurred");
       }
     } catch (err) {
       if (err instanceof Error) {
