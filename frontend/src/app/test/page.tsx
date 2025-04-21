@@ -17,6 +17,10 @@ type CustomFormData = {
   month: string;
   year: string;
   country: string;
+  firstname: string;
+  lastname: string;
+  avatarImage: string;
+  backgroundImage: string;
 };
 
 const Profile = () => {
@@ -31,6 +35,10 @@ const Profile = () => {
     month: "",
     year: "",
     country: "",
+    firstname: "",
+    lastname: "",
+    avatarImage: "",
+    backgroundImage: "",
   });
 
   useEffect(() => {
