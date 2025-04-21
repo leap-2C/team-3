@@ -1,14 +1,13 @@
-"use client"
-import React from 'react'
-import DonationProfile from './donationProfile'
-import RecentDonations from './recentDonations'
-import CreateDonation from './createDonation'
-import { useParams } from 'next/navigation'
+"use client";
+import React from "react";
+import DonationProfile from "./donationProfile";
+import RecentDonations from "./recentDonations";
+import CreateDonation from "./createDonation";
+import { useParams } from "next/navigation";
 
 const DonationCreator = () => {
   const params = useParams();
   const userId = parseInt(params.id as string, 10);
-
 
   if (isNaN(userId)) {
     return <div>Invalid user ID</div>;
@@ -22,7 +21,7 @@ const DonationCreator = () => {
       </div>
       <CreateDonation />
     </div>
-  )
-}
+  );
+};
 
-export default DonationCreator
+export default DonationCreator;

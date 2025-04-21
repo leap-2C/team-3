@@ -48,6 +48,10 @@ const Explore = () => {
     const debounceTimeout = setTimeout(fetchUsers, 300); // Debounce API calls
     return () => clearTimeout(debounceTimeout);
   }, [searchQuery, API]);
+
+
+ 
+ 
   return (
     <>
       <div className="w-full px-[10%] min-h-screen">

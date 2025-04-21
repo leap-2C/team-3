@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 import axios from "axios";
 import Cookies from "js-cookie";
 
-const API_URL = process.env.API_URL;
+const API = process.env.NEXT_PUBLIC_API_URL;
 
 export function LoginForm({
   className,
@@ -27,7 +27,7 @@ export function LoginForm({
     e.preventDefault();
     setIsLoading(true);
     try {
-      const res = await axios.post(`${API_URL}/api/auth/sign-in`, data, {
+      const res = await axios.post(`${API}/api/auth/sign-in`, data, {
         withCredentials: true,
       });
       setIsLoading(false);
@@ -45,8 +45,7 @@ export function LoginForm({
     <form
       className={cn("flex flex-col gap-6", className)}
       {...props}
-      onSubmit={fetchSignIn}
-    >
+      onSubmit={fetchSignIn}>
       <div className="flex flex-col items-center gap-2 text-center">
         <h1 className="text-4xl font-bold">Welcome Back</h1>
         <p className="text-balance text-sm text-muted-foreground -mt-2">

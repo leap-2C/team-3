@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button } from "./ui/button";
+import axios from "axios";
 interface ProfileCardProps {
   socialMediaURL: string;
   about: string;
@@ -22,13 +23,17 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({
 }) => {
   const router = useRouter();
   const handlePush = () => {
+    fetchUser();
     router.push(`/donation/${id}`);
+  };
+  const fetchUser = () => {
+    const response = axios.get(`http://localhost:8000/api/profile/all/${id}`);
+    console.log(response.data);
   };
   return (
     <div
       onClick={() => handlePush()}
-      className="bg-white rounded-2xl shadow-lg overflow-hidden border-2 border-[var(--foreground)] hover:border-[#797979] transition-all"
-    >
+      className="bg-white rounded-2xl shadow-lg overflow-hidden border-2 border-[var(--foreground)] hover:border-[#797979] transition-all">
       <div className="relative">
         <div className="w-[362px] h-[128px] ">
           <Image
@@ -61,8 +66,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({
           href={`https://buymecoffe.vercel.app/123${socialMediaURL}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-[#167ab3] text-xs font-semibold mt-5 mb-2 flex items-center"
-        >
+          className="text-[#167ab3] text-xs font-semibold mt-5 mb-2 flex items-center">
           <Link2
             className="inline mr-1.5"
             color="rgba(0, 0, 0, 0.5)"

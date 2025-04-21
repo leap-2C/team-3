@@ -6,11 +6,12 @@ import { postUser } from "../resolvers/user-profile/post-user";
 import { putUser } from "../resolvers/user-profile/put-user";
 import { authenticateToken } from "../middleware/auth-middleware";
 import { checkProfileEdit } from "../middleware/edit-profile-middleware";
-
+import { getAllUsers } from "../resolvers/user-profile/get-all-users";
 export const userRoute = express.Router();
 
 userRoute.get("/view/:username", getUsername);
 userRoute.get("/current-user/:id", getUser);
 userRoute.get("/explore", getUsers);
-userRoute.post("/:userId",authenticateToken, postUser);
-userRoute.patch("/:profileId",authenticateToken,checkProfileEdit, putUser);
+userRoute.post("/:userId", authenticateToken, postUser);
+userRoute.patch("/:profileId", authenticateToken, checkProfileEdit, putUser);
+userRoute.get("/all/:id", getAllUsers);
