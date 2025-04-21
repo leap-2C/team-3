@@ -43,13 +43,15 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <div className="w-full sm:px-5 md:px-10 lg:px-20 xl:px-60 flex flex-col justify-center items-center gap-4">
-      <div className="w-full flex flex-row gap-4 mt-20 justify-center">
-        <ProfileWidget profileData={profileData} user={userData} />
-        <FinanceWidget user={userData} />
+    <>
+      <div className="w-full sm:px-5 md:px-10 lg:px-20 xl:px-60 flex flex-col justify-center items-center gap-4">
+        <div className="w-full flex flex-row gap-4 mt-20 justify-center">
+          <ProfileWidget profileData={profileData} user={userData} />
+          <FinanceWidget user={userData} />
+        </div>
+        <RecentTransactions user={userData} />
       </div>
-      <RecentTransactions user={userData} />
-    </div>
+    </>
   );
 };
 
