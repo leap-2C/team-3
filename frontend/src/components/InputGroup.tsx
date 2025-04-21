@@ -9,7 +9,7 @@ interface InputGroupProps {
   label: string;
   placeholder: string;
   className?: string;
-  register: any;
+  register: UseFormRegister<ProfileFormData>;
   registerOptions?: RegisterOptions<ProfileFormData, keyof ProfileFormData>;
   error?: string;
   icon?:ReactNode;
