@@ -1,11 +1,8 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
-import countryList from "react-select-country-list";
+import React, { useEffect, useMemo, useState } from "react";;
 import { GlareCard } from "@/components/ui/glare-card";
 import { useForm } from "react-hook-form";
-import InputGroup from "@/components/InputGroup";
-import { Button } from "@/components/ui/button";
 import ReactFlagsSelect from "react-flags-select";
 import { Input } from "@/components/ui/input";
 import { Label } from "@radix-ui/react-label";
@@ -20,31 +17,20 @@ import Visa from "@/assets/Visa";
 import { Cpu, Wifi } from "lucide-react";
 import { HoverBorderGradient } from "@/components/ui/hover-border-gradient";
 import InputGroupThree from "./InputGroupThree";
-
-type CountryOption = {
-  label: string;
-  value: string;
-};
+import { postBankCardInfo } from "@/lib/api";
+import { useRouter } from "next/navigation";
+import { useUser } from "@/contexts/UserContext";
 
 export type bankCardData = {
+  country?: string;
   cardNumber: string;
   firstName: string;
   lastName: string;
-  month: string;
-  year: string;
 };
-
-function getFlagEmoji(countryCode: string) {
-  const codePoints = countryCode
-    .toUpperCase()
-    .split("")
-    .map((char) => 127397 + char.charCodeAt(0));
-  return String.fromCodePoint(...codePoints);
-}
 
 interface StepThreeProps {
   inputValue: {
-    url: string;
+    country?: string;
     cardNumber?: string;
     firstName?: string;
     lastName?: string;
@@ -69,27 +55,33 @@ const StepThree: React.FC<StepThreeProps> = ({
     watch,
   } = useForm<bankCardData>({
     defaultValues: {
+      country: inputValue.country || "MN",
       cardNumber: inputValue.cardNumber || "",
       firstName: inputValue.firstName || "",
       lastName: inputValue.lastName || "",
-      month: inputValue.month || "",
-      year: inputValue.year || "",
     },
   });
+  const { user, isLoading } = useUser();
+  const [userData, setUserData] = useState<any>(null);
 
-  const options = useMemo(() => {
-    return countryList()
-      .getData()
-      .map((country) => ({
-        ...country,
-        label: `${getFlagEmoji(country.value)} ${country.label}`,
-      }));
-  }, []);
+  const router = useRouter();
+  console.log(inputValue, "inputValue");
 
-  const onSubmit = (data: bankCardData) => {
-    setInputValue((prev: bankCardData) => ({ ...prev, ...data }));
-    stepNext();
+  const onSubmit = async (data: bankCardData) => {
+    try {
+      setInputValue((prev: bankCardData) => ({ ...prev, ...data }));
+
+      const result = await postBankCardInfo(data, String(user?.id || ""));
+      console.log("Posted successfully", result);
+      console.log(data, "data");
+
+      stepNext();
+      router.push("/dashboard");
+    } catch (error) {
+      console.error("Failed to post bank card info:", error);
+    }
   };
+
 
   const months = Array.from({ length: 12 }, (_, index) =>
     (index + 1).toString()
@@ -97,6 +89,13 @@ const StepThree: React.FC<StepThreeProps> = ({
   const years = Array.from({ length: 11 }, (_, index) =>
     (2025 + index).toString()
   );
+
+  useEffect(() => {
+    if (user) {
+      setUserData(user)
+      console.log("userData", user);
+    }
+  }, [user, isLoading])
 
   return (
     <div className="flex items-center justify-center w-full text-white gap-80">
@@ -164,8 +163,6 @@ const StepThree: React.FC<StepThreeProps> = ({
             <div className="w-full flex flex-row gap-3">
               <div className="w-2/4">
                 <Select
-                  onValueChange={(value) => setValue("month", value)}
-                  value={watch("month")}
                 >
                   <SelectTrigger className="w-full rounded-2xl bg-[#161616] border border-[#3B3B3B] px-4 py-7">
                     <SelectValue placeholder="Month" />
@@ -181,8 +178,7 @@ const StepThree: React.FC<StepThreeProps> = ({
               </div>
               <div className="w-2/4">
                 <Select
-                  onValueChange={(value) => setValue("year", value)}
-                  value={watch("year")}
+
                 >
                   <SelectTrigger className="w-full h-[65px] rounded-2xl bg-[#161616] border border-[#3B3B3B] px-4 py-7">
                     <SelectValue placeholder="Year" />
@@ -200,13 +196,15 @@ const StepThree: React.FC<StepThreeProps> = ({
           </div>
 
           <div className="w-full flex justify-center text-center dark">
-            <HoverBorderGradient
-              containerClassName="rounded-full"
-              as="button"
-              className="dark:bg-black bg-white text-black dark:text-white space-x-2 w-[400px] flex justify-center items-center"
-            >
-              <span>Finish</span>
-            </HoverBorderGradient>
+            <button type="submit" className="w-full flex justify-center">
+              <HoverBorderGradient
+                containerClassName="rounded-full"
+                as="div"
+                className="dark:bg-black bg-white text-black dark:text-white space-x-2 w-[400px] flex justify-center items-center"
+              >
+                <span>Finish</span>
+              </HoverBorderGradient>
+            </button>
           </div>
         </div>
       </form>
