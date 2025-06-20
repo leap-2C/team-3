@@ -8,11 +8,12 @@ import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { useUser } from "@/contexts/UserContext";
 import { createProfile } from "@/lib/api";
+import { CustomFormDataType } from "@/app/test/page";
 
 export type ProfileFormData = {
   username: string;
-  firstname: string;
-  lastname: string;
+  firstName: string;
+  lastName: string;
   about: string;
   avatarImage: string | null;
   backgroundImage: string | null;
@@ -24,8 +25,8 @@ type ImageState = {
 };
 
 interface StepTwoProps {
-  inputValue: ProfileFormData;
-  setInputValue: any;
+  inputValue: CustomFormDataType;
+  setInputValue: React.Dispatch<React.SetStateAction<CustomFormDataType>>;
   stepNext: () => void;
 }
 
@@ -43,9 +44,9 @@ const StepTwo: React.FC<StepTwoProps> = ({
   } = useForm<ProfileFormData>({
     defaultValues: {
       username: inputValue.username,
-      firstname: "",
-      lastname: "",
-      about: "",
+      firstName: '',
+      lastName: '',
+      about: '',
     },
   });
 
@@ -58,18 +59,23 @@ const StepTwo: React.FC<StepTwoProps> = ({
     profile: { file: null, preview: null },
   });
 
+  // default profile and cover images
+  const defaultAvatarImage = "https://shorturl.at/Qy5e9"; 
+  const defaultBackgroundImage = "https://shorturl.at/reOZ8"; 
+
   const onSubmit = async (data: ProfileFormData) => {
     const avatarImageUrl = images.profile.file
       ? await uploadImage(images.profile.file)
-      : null;
+      : defaultAvatarImage;
+
     const backgroundImageUrl = images.cover.file
       ? await uploadImage(images.cover.file)
-      : null;
+      : defaultBackgroundImage;
 
     const finalProfileData: ProfileFormData = {
       username: data.username,
-      firstname: data.firstname,
-      lastname: data.lastname,
+      firstName: data.firstName,
+      lastName: data.lastName,
       about: data.about,
       avatarImage: avatarImageUrl,
       backgroundImage: backgroundImageUrl,
@@ -89,11 +95,13 @@ const StepTwo: React.FC<StepTwoProps> = ({
     }
   };
 
+
   // useEffect(() => {
   //   if (inputValue) {
   //     reset(inputValue);
   //   }
   // }, [inputValue, reset]);
+
 
   useEffect(() => {
     if (user) {
@@ -106,8 +114,8 @@ const StepTwo: React.FC<StepTwoProps> = ({
     if (user) {
       reset({
         username: user.username || "",
-        firstname: "",
-        lastname: "",
+        firstName: "",
+        lastName: "",
         about: "",
       });
     }
@@ -118,8 +126,8 @@ const StepTwo: React.FC<StepTwoProps> = ({
       setInputValue((prev: StepTwoProps["inputValue"]) => ({
         ...prev,
         username: value.username || "",
-        firstname: value.firstname || "",
-        lastname: value.lastname || "",
+        firstName: value.firstName || "",
+        lastName: value.lastName || "",
         about: value.about || "",
       }));
     });
@@ -203,7 +211,7 @@ const StepTwo: React.FC<StepTwoProps> = ({
               />
             )}
             <InputGroup
-              id="firstname"
+              id="firstName"
               label="First Name"
               placeholder="Your first name"
               className="col-span-3"
@@ -215,11 +223,11 @@ const StepTwo: React.FC<StepTwoProps> = ({
                   message: "* At least 2 characters",
                 },
               }}
-              error={errors.firstname?.message}
+              error={errors.firstName?.message}
             />
 
             <InputGroup
-              id="lastname"
+              id="lastName"
               label="Last Name"
               placeholder="Your last name"
               className="col-span-3"
@@ -231,7 +239,7 @@ const StepTwo: React.FC<StepTwoProps> = ({
                   message: "* At least 2 characters",
                 },
               }}
-              error={errors.lastname?.message}
+              error={errors.lastName?.message}
             />
             <TextareaGroup
               id="about"
@@ -334,7 +342,7 @@ const StepTwo: React.FC<StepTwoProps> = ({
 
           <div className="h-1/2 bg-white box-border p-8 flex flex-col gap-4 ">
             <div className="font-extrabold text-black text-3xl mt-8">
-              {watchedValues.firstname || "Your Name"}
+              {watchedValues.firstName || "Your Name"}
             </div>
             <div className="text-black/60 -mt-4 text-sm">
               @{watchedValues.username || "username"}
