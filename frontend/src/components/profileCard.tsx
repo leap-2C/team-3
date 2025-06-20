@@ -2,6 +2,7 @@ import { ExternalLink, Link2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { Button } from "./ui/button";
 interface ProfileCardProps {
   socialMediaURL: string;
   about: string;
@@ -26,7 +27,8 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({
   return (
     <div
       onClick={() => handlePush()}
-      className="bg-white rounded-2xl shadow-lg overflow-hidden ">
+      className="bg-white rounded-2xl shadow-lg overflow-hidden border-2 border-[var(--foreground)] hover:border-[#797979] transition-all"
+    >
       <div className="relative">
         <div className="w-[362px] h-[128px] ">
           <Image
@@ -45,35 +47,29 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({
             fill
           />
         </div>
-        <Link href="">
-          <button className="text-sm py-1 px-2 bg-white font-bold text-black absolute right-6 bottom-5 rounded-full hover:bg-gray-100">
-            <span className="mr-1">View Profile</span>
-            <ExternalLink
-              className="inline"
-              height={10}
-              width={10}
-              strokeWidth={3}
-            />
-          </button>
-        </Link>
+        <Button className="text-xs bg-white font-bold text-black absolute right-3 bottom-4 rounded-full hover:bg-gray-100">
+          View Profile
+          <ExternalLink />
+        </Button>
       </div>
       <div className="p-4 pt-12">
-        <h2 className="font-extrabold text-xl tracking-[-3%]">{name}</h2>
-        <p className="text-[#000000] opacity-50 text-xs mt-[15px] font-medium">
+        <h2 className="font-extrabold text-xl tracking-[-3%] mt-2">@{name}</h2>
+        <p className="text-[#000000] opacity-50 text-xs mt-1 font-medium">
           {about}
         </p>
         <a
-          href={socialMediaURL}
+          href={`https://buymecoffe.vercel.app/123${socialMediaURL}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-[#167ab3] text-xs font-semibold mt-3 block">
+          className="text-[#167ab3] text-xs font-semibold mt-5 mb-2 flex items-center"
+        >
           <Link2
             className="inline mr-1.5"
             color="rgba(0, 0, 0, 0.5)"
-            width={14}
-            height={14}
+            width={16}
+            height={16}
           />
-          {socialMediaURL}
+          https://buymecoffe.vercel.app/{socialMediaURL}
         </a>
       </div>
     </div>

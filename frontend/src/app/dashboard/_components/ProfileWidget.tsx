@@ -108,7 +108,7 @@ const ProfileWidget = (props: { profileData: any; user: any }) => {
               {user?.username}
             </p>
             <p className="text-xs font-light text-[var(--background)]/40 -mt-[2px]">
-              @{profileData?.name}
+              @{patchData?.name || profileData?.name}
             </p>
           </div>
         </div>

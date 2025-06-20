@@ -87,6 +87,17 @@ const EditProfileDialog = ({
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="Name" className="text-right">
+              Name
+            </Label>
+            <Input
+              id="name"
+              value={form.name}
+              onChange={handleChange}
+              className="col-span-3"
+            />
+          </div>
+          {/* <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="firstName" className="text-right">
               First Name
             </Label>
@@ -107,7 +118,7 @@ const EditProfileDialog = ({
               onChange={handleChange}
               className="col-span-3"
             />
-          </div>
+          </div> */}
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="email" className="text-right">
               Email

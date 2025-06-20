@@ -51,8 +51,8 @@ const DonationCard = ({ donation }: { donation: Donation }) => (
 const RecentDonations = ({ userId }: { userId: number }) => {
 
 
-// const userId = 16
 
+  const test = process.env.NEXT_PUBLIC_API_URL;
 
   const [data, setData] = useState<Donation[]>([])
   const [loading, setLoading] = useState<boolean>(true)
@@ -62,7 +62,7 @@ const RecentDonations = ({ userId }: { userId: number }) => {
     const fetchData = async () => {
       setLoading(true)
       try {
-        const response = await axios.get(`http://localhost:8000/api/donation/received/${userId}`)
+        const response = await axios.get(`${test}/api/donation/received/${userId}`)
         setData(response.data.receivedDonations || [])
      
               

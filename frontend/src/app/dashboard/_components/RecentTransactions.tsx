@@ -103,7 +103,7 @@ const RecentTransactions = ({ user }: { user: any }) => {
 
       {filteredData.length === 0 ? (
         <div className="w-full h-full p-6 flex justify-center items-center">
-          <p className="text-base text-[var(--background)]/60 font-semibold">
+          <p className="text-base text-[var(--background)]/60 font-regular">
             Currently there is no support 🥺
           </p>
         </div>
